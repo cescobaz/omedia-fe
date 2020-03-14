@@ -2,7 +2,7 @@
   <div class="hello">
     <div class="wrapper">
       <div v-for="m in media" :key="m.id" class="box">
-        <img :src="m.path" />
+        <a target="_blank" :href="m.path"><img :src="m.path"/></a>
       </div>
     </div>
   </div>
@@ -46,7 +46,6 @@ export default {
   flex-wrap: wrap;
   padding: 0;
   margin: 0;
-  background-color: #fff;
   color: #444;
 }
 
@@ -54,12 +53,16 @@ export default {
   height: 300px;
   width: 300px;
   position: relative;
-  background-color: #444;
-  color: #fff;
-  border-radius: 5px;
-  padding: 20px;
+  padding: 0;
   font-size: 150%;
   margin: 10px;
+}
+.box a {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .box img {
   max-height: 100%;
