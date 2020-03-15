@@ -2,17 +2,23 @@
   <div class="full-size">
     <div class="full-size wrapper">
       <div v-for="m in media" :key="m.path" class="box">
-        <a target="_blank" :href="m.path"><img :src="m.path"/></a>
+        <a target="_blank" :href="m.path">
+          <img :src="m.path"/><ToolBar class="background toolbar"
+        /></a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import ToolBar from "./ToolBar.vue";
 export default {
   name: "Gallery",
   props: {
     media: Array
+  },
+  components: {
+    ToolBar
   }
 };
 </script>
@@ -27,14 +33,25 @@ export default {
   color: #444;
   overflow: scroll;
 }
-
+.toolbar {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.box:hover .toolbar {
+  display: block;
+}
 .box {
   height: 300px;
   width: 300px;
   position: relative;
   padding: 0;
   font-size: 150%;
-  margin: 10px;
+  margin: 16px;
 }
 .box a {
   height: 100%;
