@@ -8,3 +8,26 @@
  width: 100%;
  height: 100%;
 }
+.font {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left;
+  font-size: 14px;
+}
+.background {
+  background-color: #222222;
+}
+.color {
+  color: #eeeeee;
+}
+div {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left;
+  font-size: 14px;
+  color: #eeeeee;
+  background-color: #222222;
+}
+

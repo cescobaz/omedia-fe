@@ -3,7 +3,7 @@
     <div class="wrapper">
       <Navigator class="navigator" />
       <div class="page">
-        <div class="header"></div>
+        <div class="header">{{ section }}</div>
         <div class="content">
           <Gallery :media="media" />
         </div>
@@ -26,6 +26,7 @@ export default {
   props: {},
   data() {
     return {
+      section: "media",
       media: [
         {
           id: 0,
@@ -56,12 +57,10 @@ export default {
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  background-color: #f0f0f0;
 }
 .navigator {
   width: 150px;
   height: 100%;
-  background-color: #00ff00;
 }
 .page {
   height: 100%;
@@ -69,12 +68,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  background-color: #ff0000;
 }
 .header {
   width: 100%;
-  height: 64px;
-  background-color: #0000ff;
+  padding: 8px;
 }
 .content {
   flex: 1;
