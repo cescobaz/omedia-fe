@@ -1,10 +1,12 @@
 <template>
-  <div class="wrapper">
-    <div class="navigator" />
-    <div class="page">
-      <div class="header"></div>
-      <div class="content">
-        <Gallery :media="media" />
+  <div class="full-size">
+    <div class="wrapper">
+      <Navigator class="navigator" />
+      <div class="page">
+        <div class="header"></div>
+        <div class="content">
+          <Gallery :media="media" />
+        </div>
       </div>
     </div>
   </div>
@@ -12,10 +14,13 @@
 
 <script>
 import axios from "axios";
+import Navigator from "./Navigator.vue";
 import Gallery from "./Gallery.vue";
+
 export default {
   name: "Navigation",
   components: {
+    Navigator,
     Gallery
   },
   props: {},

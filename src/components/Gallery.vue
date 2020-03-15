@@ -1,7 +1,9 @@
 <template>
-  <div class="wrapper">
-    <div v-for="m in media" :key="m.id" class="box">
-      <a target="_blank" :href="m.path"><img :src="m.path"/></a>
+  <div class="full-size">
+    <div class="full-size wrapper">
+      <div v-for="m in media" :key="m.id" class="box">
+        <a target="_blank" :href="m.path"><img :src="m.path"/></a>
+      </div>
     </div>
   </div>
 </template>
