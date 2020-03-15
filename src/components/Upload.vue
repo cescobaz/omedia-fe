@@ -5,7 +5,7 @@
       method="post"
       enctype="multipart/form-data"
     >
-      <input type="file" name="file1" />
+      <input type="file" name="files" multiple />
       <input name="upload" value="upload" type="submit" />
     </form>
   </div>
