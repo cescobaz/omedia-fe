@@ -45,7 +45,7 @@ export default {
   position: relative;
   display: block;
   padding: 2px 0;
-  margin: 10px 0;
+  margin: 0;
   cursor: pointer;
   width: 100%;
 }
