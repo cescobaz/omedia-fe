@@ -50,7 +50,6 @@ export default {
   width: 100%;
 }
 .navigator-item div {
-  display: inline;
   margin: 0;
   padding: 2px;
 }
