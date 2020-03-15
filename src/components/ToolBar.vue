@@ -1,6 +1,18 @@
 <template>
-  <div class="full-size">
-    <div class="background color wrapper">toolbar:</div>
+  <div class="selected">
+    <div class="font selected wrapper">
+      <span
+        v-for="action in actions"
+        :key="action.label"
+        @click="action.do(value)"
+        class="action"
+        style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;"
+        unselectable="on"
+        onselectstart="return false;"
+        onmousedown="return false;"
+        >{{ action.label }}</span
+      >
+    </div>
   </div>
 </template>
 
@@ -8,7 +20,7 @@
 export default {
   name: "ToolBar",
   components: {},
-  props: {},
+  props: { actions: Array, value: Object },
   data() {
     return {};
   }
@@ -18,5 +30,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .wrapper {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+.action {
+  margin: 8px;
+  cursor: pointer;
 }
 </style>

@@ -2,9 +2,8 @@
   <div class="full-size">
     <div class="full-size wrapper">
       <div v-for="m in media" :key="m.path" class="box">
-        <a target="_blank" :href="m.path">
-          <img :src="m.path"/><ToolBar class="background toolbar"
-        /></a>
+        <div class="box-centered"><img :src="m.path" /></div>
+        <ToolBar :actions="actions" :value="m" class="background toolbar" />
       </div>
     </div>
   </div>
@@ -19,6 +18,19 @@ export default {
   },
   components: {
     ToolBar
+  },
+  data() {
+    return {
+      actions: [
+        { label: "delete", do: console.log },
+        {
+          label: "open",
+          do: media => {
+            window.open(media.path, "_blank");
+          }
+        }
+      ]
+    };
   }
 };
 </script>
@@ -37,7 +49,8 @@ export default {
   display: none;
   position: absolute;
   width: 100%;
-  height: 30px;
+  padding: 0;
+  margin: 0;
   bottom: 0;
   left: 0;
   right: 0;
@@ -53,7 +66,7 @@ export default {
   font-size: 150%;
   margin: 16px;
 }
-.box a {
+.box-centered {
   height: 100%;
   width: 100%;
   display: flex;
