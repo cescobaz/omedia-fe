@@ -1,40 +1,16 @@
 <template>
-  <div class="hello">
-    <div class="wrapper">
-      <div v-for="m in media" :key="m.id" class="box">
-        <a target="_blank" :href="m.path"><img :src="m.path"/></a>
-      </div>
+  <div class="wrapper">
+    <div v-for="m in media" :key="m.id" class="box">
+      <a target="_blank" :href="m.path"><img :src="m.path"/></a>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
-  data() {
-    return {
-      media: [
-        {
-          id: 0,
-          filePath: "PROVA"
-        }
-      ]
-    };
-  },
-  name: "HelloWorld",
+  name: "Gallery",
   props: {
-    msg: String
-  },
-  created() {
-    axios
-      .get("/backend/api/media/")
-      .then(response => {
-        this.media = response.data.map(media => {
-          media.path = "/backend" + media.filePath;
-          return media;
-        });
-      })
-      .catch(console.log);
+    media: String
   }
 };
 </script>
@@ -47,6 +23,7 @@ export default {
   padding: 0;
   margin: 0;
   color: #444;
+  overflow: scroll;
 }
 
 .box {

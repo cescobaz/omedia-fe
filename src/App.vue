@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Gallery msg="Welcome to Your Vue.js App" />
+    <Navigation />
   </div>
 </template>
 
 <script>
-import Gallery from "./components/Gallery.vue";
+import Navigation from "./components/Navigation.vue";
 
 export default {
   name: "App",
   components: {
-    Gallery
+    Navigation
   }
 };
 </script>
@@ -25,5 +25,7 @@ export default {
   margin: 0;
   padding: 0;
   background-color: #222222;
+  width: 100%;
+  height: 100%;
 }
 </style>
