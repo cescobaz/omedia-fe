@@ -8,7 +8,7 @@
  width: 100%;
  height: 100%;
 }
-.font {
+.font, button, input, body, html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -16,30 +16,30 @@
   font-size: 14px;
   line-height: normal;
 }
-.background {
+.background, button, input {
   background-color: #222222;
 }
-.color {
+.color, button, input  {
   color: #eeeeee;
 }
-.selected, .router-link-active div {
+.selected, .router-link-active div, button, input {
   color: #222222;
   background-color: #eeeeee;
   padding: 2px;
   margin: 0;
-  width: 100%;
   display: block;
+}
+.selected {
+  width: 100%;
+}
+button, input {
+  border: none;
+  text-decoration: none;
 }
 div {
   line-height: normal;
 }
 body, html, .router-link, a {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  font-size: 14px;
-  line-height: normal;
   color: #eeeeee;
   background-color: #222222;
 }
