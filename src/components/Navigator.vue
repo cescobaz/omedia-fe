@@ -1,6 +1,7 @@
 <template>
   <div class="full-height">
     <div class="full-height wrapper">
+      <div class="selected title">omedia</div>
       <router-link to="/upload" class="navigator-item">
         <div>
           upload
@@ -30,6 +31,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.title {
+  margin: 0 0 16px 0px;
 }
 .navigator-item {
   border: none;
@@ -42,6 +50,8 @@ export default {
   width: 100%;
 }
 .navigator-item div {
-  padding: 0 8px;
+  display: inline;
+  margin: 0;
+  padding: 2px;
 }
 </style>

@@ -3,7 +3,9 @@
     <div class="wrapper">
       <Navigator class="navigator" />
       <div class="page">
-        <div class="header">{{ section }}</div>
+        <div class="header">
+          <div class="selected">{{ $route.path }}</div>
+        </div>
         <div class="content">
           <router-view></router-view>
         </div>
@@ -24,7 +26,6 @@ export default {
   props: {},
   data() {
     return {
-      section: "media",
       media: [
         {
           id: 0,
@@ -68,8 +69,17 @@ export default {
   flex-direction: column;
 }
 .header {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 100%;
-  padding: 8px;
+  padding: 0;
+}
+.header div {
+  padding: 2px;
+  margin: 0;
 }
 .content {
   flex: 1;

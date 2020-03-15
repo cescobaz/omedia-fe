@@ -14,6 +14,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   font-size: 14px;
+  line-height: normal;
 }
 .background {
   background-color: #222222;
@@ -21,13 +22,22 @@
 .color {
   color: #eeeeee;
 }
+.selected, .router-link-active div {
+  color: #222222;
+  background-color: #eeeeee;
+  padding: 2px;
+  margin: 0;
+}
 div {
+  line-height: normal;
+}
+body, html, .router-link, a {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   font-size: 14px;
+  line-height: normal;
   color: #eeeeee;
   background-color: #222222;
 }
-
