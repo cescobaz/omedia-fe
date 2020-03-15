@@ -12,7 +12,7 @@
 export default {
   name: "Gallery",
   props: {
-    media: String
+    media: Array
   }
 };
 </script>

@@ -5,7 +5,7 @@
       <div class="page">
         <div class="header">{{ section }}</div>
         <div class="content">
-          <Gallery :media="media" />
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -15,13 +15,11 @@
 <script>
 import axios from "axios";
 import Navigator from "./Navigator.vue";
-import Gallery from "./Gallery.vue";
 
 export default {
   name: "Navigation",
   components: {
-    Navigator,
-    Gallery
+    Navigator
   },
   props: {},
   data() {

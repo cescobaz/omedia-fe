@@ -1,21 +1,21 @@
 <template>
   <div class="full-height">
     <div class="full-height wrapper">
-      <div class="navigator-item">
+      <router-link to="/upload" class="navigator-item">
         <div>
           upload
         </div>
-      </div>
-      <div class="navigator-item">
+      </router-link>
+      <router-link to="/media" class="navigator-item">
         <div>
           media
         </div>
-      </div>
-      <div class="navigator-item">
+      </router-link>
+      <router-link to="/to-import" class="navigator-item">
         <div>
           to import
         </div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
