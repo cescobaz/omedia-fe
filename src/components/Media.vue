@@ -1,6 +1,5 @@
 <template>
   <div class="full-size">
-    <ToolBar :label="toolbarLabel" :actions="actions" />
     <Gallery class="full-size" :media="media" :selected="selected" />
   </div>
 </template>
@@ -8,12 +7,10 @@
 <script>
 import axios from "axios";
 import Gallery from "./Gallery.vue";
-import ToolBar from "./ToolBar.vue";
 
 export default {
   name: "Media",
   components: {
-    ToolBar,
     Gallery
   },
   props: {},
@@ -24,20 +21,11 @@ export default {
           id: 0,
           filePath: "PROVA"
         }
-      ],
-      selections: [],
-      actions: [{ label: "delete" }, { label: "present" }]
+      ]
     };
   },
   methods: {
-    selected(media, selections) {
-      this.$data.selections = selections;
-    }
-  },
-  computed: {
-    toolbarLabel() {
-      return `selected ${this.$data.selections.length} media`;
-    }
+    selected() {}
   },
   mounted() {
     axios

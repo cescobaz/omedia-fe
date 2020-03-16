@@ -1,16 +1,19 @@
 <template>
   <div class="full-size">
-    <div class="full-size wrapper">
-      <div v-for="(m, index) in media" :key="m.path" class="box">
-        <div
-          class="box-centered"
-          @click="toggleSelection(index, m)"
-          :class="{ inverted: selections.indexOf(m.path) >= 0 }"
-        >
-          <img :src="m.path" />
+    <div class="wrapper">
+      <div class="gallery">
+        <div v-for="(m, index) in media" :key="m.path" class="box">
+          <div
+            class="box-centered"
+            @click="toggleSelection(index, m)"
+            :class="{ inverted: selections.indexOf(m.path) >= 0 }"
+          >
+            <img :src="m.path" />
+          </div>
+          <ToolBar :actions="actions" :value="m" class="toolbar" />
         </div>
-        <ToolBar :actions="actions" :value="m" class="toolbar" />
       </div>
+      <ToolBar :label="toolbarLabel" :actions="selectionActions" />
     </div>
   </div>
 </template>
@@ -38,8 +41,23 @@ export default {
             window.open(media.path, "_blank");
           }
         }
+      ],
+      selectionActions: [
+        {
+          label: "deselect",
+          do: () => {
+            this.$data.selections = [];
+          }
+        },
+        { label: "delete", do: console.log },
+        { label: "present", do: console.log }
       ]
     };
+  },
+  computed: {
+    toolbarLabel() {
+      return `selected ${this.$data.selections.length} media`;
+    }
   },
   methods: {
     toggleSelection(index, media) {
@@ -49,8 +67,12 @@ export default {
       } else {
         this.$data.selections.push(media.path);
       }
+    }
+  },
+  watch: {
+    selections(value) {
       if (this.selected) {
-        this.selected(media, this.$data.selections);
+        this.selected(value);
       }
     }
   }
@@ -61,11 +83,19 @@ export default {
 <style scoped>
 .wrapper {
   display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+.gallery {
+  flex: 1;
+  display: flex;
   flex-wrap: wrap;
   padding: 0;
   margin: 0;
-  color: #444;
   overflow: scroll;
+  width: 100%;
+  height: 100%;
 }
 .toolbar {
   display: none;
