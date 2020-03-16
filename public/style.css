@@ -22,9 +22,11 @@
 .color, button, input  {
   color: #eeeeee;
 }
-.selected, .router-link-active div, button, input {
+.inverted, .selected, .router-link-active div, button, input{
   color: #222222;
   background-color: #eeeeee;
+}
+.selected, .router-link-active div, button, input {
   padding: 2px;
   margin: 0;
   display: block;

@@ -1,9 +1,15 @@
 <template>
   <div class="full-size">
     <div class="full-size wrapper">
-      <div v-for="m in media" :key="m.path" class="box">
-        <div class="box-centered"><img :src="m.path" /></div>
-        <ToolBar :actions="actions" :value="m" class="background toolbar" />
+      <div v-for="(m, index) in media" :key="m.path" class="box">
+        <div
+          class="box-centered"
+          @click="toggleSelection(index, m)"
+          :class="{ inverted: selections.indexOf(m.path) >= 0 }"
+        >
+          <img :src="m.path" />
+        </div>
+        <ToolBar :actions="actions" :value="m" class="toolbar" />
       </div>
     </div>
   </div>
@@ -14,23 +20,39 @@ import ToolBar from "./ToolBar.vue";
 export default {
   name: "Gallery",
   props: {
-    media: Array
+    media: Array,
+    selected: Function
   },
   components: {
     ToolBar
   },
   data() {
     return {
+      selections: [],
       actions: [
         { label: "delete", do: console.log },
+        { label: "select", do: this.toggleSelection },
         {
-          label: "open",
-          do: media => {
+          label: "present",
+          do: (index, media) => {
             window.open(media.path, "_blank");
           }
         }
       ]
     };
+  },
+  methods: {
+    toggleSelection(index, media) {
+      const sIndex = this.$data.selections.indexOf(media.path);
+      if (sIndex >= 0) {
+        this.$data.selections.splice(sIndex, 1);
+      } else {
+        this.$data.selections.push(media.path);
+      }
+      if (this.selected) {
+        this.selected(media, this.$data.selections);
+      }
+    }
   }
 };
 </script>
@@ -62,13 +84,14 @@ export default {
   height: 300px;
   width: 300px;
   position: relative;
-  padding: 0;
   font-size: 150%;
   margin: 16px;
+  padding: 0;
 }
 .box-centered {
-  height: 100%;
-  width: 100%;
+  padding: 2px;
+  height: calc(100% - 4px);
+  width: calc(100% - 4px);
   display: flex;
   justify-content: center;
   align-items: center;
