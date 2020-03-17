@@ -7,7 +7,7 @@
         enctype="multipart/form-data"
       >
         <input class="full-width" type="file" name="files" multiple />
-        <input name="upload" value="upload" type="submit" />
+        <input value="upload" type="submit" />
       </form>
     </div>
   </div>
