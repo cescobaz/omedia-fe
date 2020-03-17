@@ -2,7 +2,7 @@
   <div class="full-size">
     <div class="wrapper">
       <form
-        action="/backend/api/media/"
+        action="/backend/to-import/"
         method="post"
         enctype="multipart/form-data"
       >
