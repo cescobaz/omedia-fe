@@ -1,6 +1,6 @@
 <template>
   <div class="full-size">
-    <Gallery class="full-size" :media="media" />
+    <Gallery class="full-size" :media="media" :actions="actions" />
   </div>
 </template>
 
@@ -17,10 +17,25 @@ export default {
   data() {
     return {
       section: "media",
-      media: [
+      media: [],
+      actions: [
+        { label: "delete", do: console.log },
         {
-          id: 0,
-          filePath: "PROVA"
+          label: "import",
+          do: (index, media) => {
+            axios
+              .post("/backend/api/media/", [media.filePath])
+              .then(response => {
+                console.log(response);
+              })
+              .catch(console.log);
+          }
+        },
+        {
+          label: "present",
+          do: (index, media) => {
+            window.open(media.path, "_blank");
+          }
         }
       ]
     };

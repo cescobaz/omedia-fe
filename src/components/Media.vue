@@ -1,6 +1,11 @@
 <template>
   <div class="full-size">
-    <Gallery class="full-size" :media="media" :selected="selected" />
+    <Gallery
+      class="full-size"
+      :media="media"
+      :actions="actions"
+      :selected="selected"
+    />
   </div>
 </template>
 
@@ -16,27 +21,47 @@ export default {
   props: {},
   data() {
     return {
-      media: [
+      media: [],
+      actions: [
         {
-          id: 0,
-          filePath: "PROVA"
+          label: "delete",
+          do: (index, { id }) => {
+            axios
+              .delete(`/backend/api/media/${id}`)
+              .then(() => {
+                const index = this.$data.media.findIndex(m => m.id === id);
+                if (index >= 0) {
+                  this.$data.media.splice(index, 1);
+                }
+              })
+              .catch(console.log);
+          }
+        },
+        {
+          label: "present",
+          do: (index, media) => {
+            window.open(media.path, "_blank");
+          }
         }
       ]
     };
   },
   methods: {
-    selected() {}
+    selected() {},
+    reload() {
+      axios
+        .get("/backend/api/media/")
+        .then(response => {
+          this.media = response.data.map(media => {
+            media.path = "/backend" + media.filePath;
+            return media;
+          });
+        })
+        .catch(console.log);
+    }
   },
   mounted() {
-    axios
-      .get("/backend/api/media/")
-      .then(response => {
-        this.media = response.data.map(media => {
-          media.path = "/backend" + media.filePath;
-          return media;
-        });
-      })
-      .catch(console.log);
+    this.reload();
   }
 };
 </script>

@@ -24,7 +24,8 @@ export default {
   name: "Gallery",
   props: {
     media: Array,
-    selected: Function
+    selected: Function,
+    actions: Array
   },
   components: {
     ToolBar
@@ -32,16 +33,6 @@ export default {
   data() {
     return {
       selections: [],
-      actions: [
-        { label: "delete", do: console.log },
-        { label: "select", do: this.toggleSelection },
-        {
-          label: "present",
-          do: (index, media) => {
-            window.open(media.path, "_blank");
-          }
-        }
-      ],
       selectionActions: [
         {
           label: "deselect",
