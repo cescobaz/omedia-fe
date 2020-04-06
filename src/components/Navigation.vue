@@ -4,7 +4,7 @@
       <Navigator class="navigator" />
       <div class="page">
         <div class="header">
-          <div class="selected">{{ $route.path }}</div>
+          <div class="selected">{{ $route.path }} - {{ statusMessage }}</div>
         </div>
         <div class="content">
           <router-view></router-view>
@@ -15,37 +15,39 @@
 </template>
 
 <script>
-import axios from "axios";
-import Navigator from "./Navigator.vue";
+import axios from 'axios'
+import Navigator from './Navigator.vue'
+import { mapState } from 'vuex'
 
 export default {
-  name: "Navigation",
+  name: 'Navigation',
   components: {
     Navigator
   },
   props: {},
-  data() {
+  data () {
     return {
       media: [
         {
           id: 0,
-          filePath: "PROVA"
+          filePath: 'PROVA'
         }
       ]
-    };
+    }
   },
-  created() {
+  computed: mapState(['statusMessage']),
+  created () {
     axios
-      .get("/backend/api/media/")
+      .get('/backend/api/media/')
       .then(response => {
         this.media = response.data.map(media => {
-          media.path = "/backend" + media.filePath;
-          return media;
-        });
+          media.path = '/backend' + media.filePath
+          return media
+        })
       })
-      .catch(console.log);
+      .catch(console.log)
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

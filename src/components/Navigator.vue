@@ -23,9 +23,9 @@
 
 <script>
 export default {
-  name: "Navigator",
+  name: 'Navigator',
   props: { section: String, sectionSelected: Function }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

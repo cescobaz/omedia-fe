@@ -20,13 +20,13 @@
 
 <script>
 export default {
-  name: "ToolBar",
+  name: 'ToolBar',
   components: {},
   props: { label: String, actions: Array, value: Object },
-  data() {
-    return {};
+  data () {
+    return {}
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -14,35 +14,16 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
-  name: "Upload",
+  name: 'Upload',
   components: {},
   props: {},
-  data() {
+  data () {
     return {
-      section: "media",
-      media: [
-        {
-          id: 0,
-          filePath: "PROVA"
-        }
-      ]
-    };
-  },
-  mounted() {
-    axios
-      .get("/backend/api/media/")
-      .then(response => {
-        this.media = response.data.map(media => {
-          media.path = "/backend" + media.filePath;
-          return media;
-        });
-      })
-      .catch(console.log);
+      section: 'media'
+    }
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

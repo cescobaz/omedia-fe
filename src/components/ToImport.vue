@@ -5,53 +5,57 @@
 </template>
 
 <script>
-import axios from "axios";
-import Gallery from "./Gallery.vue";
+import axios from 'axios'
+import Gallery from './Gallery.vue'
 
 export default {
-  name: "Media",
+  name: 'Media',
   components: {
     Gallery
   },
   props: {},
-  data() {
+  data () {
     return {
-      section: "media",
+      section: 'media',
       media: [],
       actions: [
-        { label: "delete", do: console.log },
+        { label: 'delete', do: console.log },
         {
-          label: "import",
+          label: 'import',
           do: (index, media) => {
             axios
-              .post("/backend/api/media/", [media.filePath])
+              .post('/backend/api/media/', [media.filePath])
               .then(response => {
-                console.log(response);
+                console.log(response)
+                const index = this.$data.media.indexOf(media)
+                if (index >= 0) {
+                  this.$data.media.splice(index, 1)
+                }
               })
-              .catch(console.log);
+              .catch(console.log)
           }
         },
         {
-          label: "present",
+          label: 'present',
           do: (index, media) => {
-            window.open(media.path, "_blank");
+            window.open(media.path, '_blank')
           }
         }
       ]
-    };
+    }
   },
-  mounted() {
+  mounted () {
     axios
-      .get("/backend/api/to-import/")
+      .get('/backend/api/to-import/')
       .then(response => {
         this.media = response.data.map(media => {
-          media.path = "/backend" + media.filePath;
-          return media;
-        });
+          media.path = '/backend' + media.filePath
+          return media
+        })
       })
-      .catch(console.log);
+      .catch(console.log)
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

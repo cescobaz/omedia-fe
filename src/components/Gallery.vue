@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import ToolBar from "./ToolBar.vue";
+import ToolBar from './ToolBar.vue'
 export default {
-  name: "Gallery",
+  name: 'Gallery',
   props: {
     media: Array,
     selected: Function,
@@ -30,44 +30,44 @@ export default {
   components: {
     ToolBar
   },
-  data() {
+  data () {
     return {
       selections: [],
       selectionActions: [
         {
-          label: "deselect",
+          label: 'deselect',
           do: () => {
-            this.$data.selections = [];
+            this.$data.selections = []
           }
         },
-        { label: "delete", do: console.log },
-        { label: "present", do: console.log }
+        { label: 'delete', do: console.log },
+        { label: 'present', do: console.log }
       ]
-    };
+    }
   },
   computed: {
-    toolbarLabel() {
-      return `selected ${this.$data.selections.length} media`;
+    toolbarLabel () {
+      return `selected ${this.$data.selections.length} media`
     }
   },
   methods: {
-    toggleSelection(index, media) {
-      const sIndex = this.$data.selections.indexOf(media.path);
+    toggleSelection (index, media) {
+      const sIndex = this.$data.selections.indexOf(media.path)
       if (sIndex >= 0) {
-        this.$data.selections.splice(sIndex, 1);
+        this.$data.selections.splice(sIndex, 1)
       } else {
-        this.$data.selections.push(media.path);
+        this.$data.selections.push(media.path)
       }
     }
   },
   watch: {
-    selections(value) {
+    selections (value) {
       if (this.selected) {
-        this.selected(value);
+        this.selected(value)
       }
     }
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

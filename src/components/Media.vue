@@ -10,60 +10,51 @@
 </template>
 
 <script>
-import axios from "axios";
-import Gallery from "./Gallery.vue";
+import axios from 'axios'
+import Gallery from './Gallery.vue'
+import { mapState } from 'vuex'
+import { actions } from '../store'
 
 export default {
-  name: "Media",
+  name: 'Media',
   components: {
     Gallery
   },
   props: {},
-  data() {
+  data () {
     return {
-      media: [],
       actions: [
         {
-          label: "delete",
+          label: 'delete',
           do: (index, { id }) => {
             axios
               .delete(`/backend/api/media/${id}`)
               .then(() => {
-                const index = this.$data.media.findIndex(m => m.id === id);
+                const index = this.$data.media.findIndex(m => m.id === id)
                 if (index >= 0) {
-                  this.$data.media.splice(index, 1);
+                  this.$data.media.splice(index, 1)
                 }
               })
-              .catch(console.log);
+              .catch(console.log)
           }
         },
         {
-          label: "present",
+          label: 'present',
           do: (index, media) => {
-            window.open(media.path, "_blank");
+            window.open(media.path, '_blank')
           }
         }
       ]
-    };
-  },
-  methods: {
-    selected() {},
-    reload() {
-      axios
-        .get("/backend/api/media/")
-        .then(response => {
-          this.media = response.data.map(media => {
-            media.path = "/backend" + media.filePath;
-            return media;
-          });
-        })
-        .catch(console.log);
     }
   },
-  mounted() {
-    this.reload();
+  methods: {
+    selected () {}
+  },
+  computed: mapState({ media: 'media' }),
+  mounted () {
+    this.$store.dispatch(actions.LOAD_MEDIA)
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
