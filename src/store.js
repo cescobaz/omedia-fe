@@ -67,6 +67,36 @@ const store = {
           }
         })
         .catch(console.log)
+    },
+    [actions.IMPORT_MEDIA] ({ state, commit }, media) {
+      commit(mutations.SET_STATUS_MESSAGE, `importing ${media.length} media ...`)
+      return axios
+        .post('/backend/api/media/', media.map(m => m.filePath))
+        .then(response => {
+          const indexes = []
+          response.data.forEach(result => {
+            if (result.result !== 'ok') {
+              return
+            }
+            const index = state.toImport.findIndex(m => m.filePath === result.toImport)
+            if (index < 0) {
+              return
+            }
+            indexes.push(index)
+          })
+          if (indexes.length === 0) {
+            commit(mutations.SET_STATUS_MESSAGE, `imported 0/${media.length} media`)
+            return
+          }
+          const newMedia = [...state.toImport]
+          indexes.forEach(index => {
+            newMedia.splice(index, 1)
+          })
+          commit(mutations.SET_TO_IMPORT, newMedia)
+          commit(mutations.SET_STATUS_MESSAGE, `imported ${indexes.length}/${media.length} media`)
+          invalidCache(actions.LOAD_MEDIA, state)
+        })
+        .catch(console.log)
     }
   }
 }

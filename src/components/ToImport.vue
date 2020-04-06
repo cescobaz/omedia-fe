@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Gallery from './Gallery.vue'
 import { mapState } from 'vuex'
 import { actions } from '../store'
@@ -20,20 +19,10 @@ export default {
     return {
       section: 'media',
       actions: [
-        { label: 'delete', do: console.log },
         {
           label: 'import',
           do: (index, media) => {
-            axios
-              .post('/backend/api/media/', [media.filePath])
-              .then(response => {
-                console.log(response)
-                const index = this.$data.media.indexOf(media)
-                if (index >= 0) {
-                  this.$data.media.splice(index, 1)
-                }
-              })
-              .catch(console.log)
+            this.$store.dispatch(actions.IMPORT_MEDIA, [media])
           }
         },
         {
