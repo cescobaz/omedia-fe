@@ -7,6 +7,8 @@
 <script>
 import axios from 'axios'
 import Gallery from './Gallery.vue'
+import { mapState } from 'vuex'
+import { actions } from '../store'
 
 export default {
   name: 'Media',
@@ -17,7 +19,6 @@ export default {
   data () {
     return {
       section: 'media',
-      media: [],
       actions: [
         { label: 'delete', do: console.log },
         {
@@ -44,16 +45,9 @@ export default {
       ]
     }
   },
+  computed: mapState({ media: 'toImport' }),
   mounted () {
-    axios
-      .get('/backend/api/to-import/')
-      .then(response => {
-        this.media = response.data.map(media => {
-          media.path = '/backend' + media.filePath
-          return media
-        })
-      })
-      .catch(console.log)
+    this.$store.dispatch(actions.LOAD_TO_IMPORT)
   }
 }
 </script>

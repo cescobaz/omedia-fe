@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Navigator from './Navigator.vue'
 import { mapState } from 'vuex'
 
@@ -26,27 +25,10 @@ export default {
   },
   props: {},
   data () {
-    return {
-      media: [
-        {
-          id: 0,
-          filePath: 'PROVA'
-        }
-      ]
-    }
+    return {}
   },
   computed: mapState(['statusMessage']),
-  created () {
-    axios
-      .get('/backend/api/media/')
-      .then(response => {
-        this.media = response.data.map(media => {
-          media.path = '/backend' + media.filePath
-          return media
-        })
-      })
-      .catch(console.log)
-  }
+  created () {}
 }
 </script>
 
