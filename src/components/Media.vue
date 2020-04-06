@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Gallery from './Gallery.vue'
 import { mapState } from 'vuex'
 import { actions } from '../store'
@@ -26,16 +25,8 @@ export default {
       actions: [
         {
           label: 'delete',
-          do: (index, { id }) => {
-            axios
-              .delete(`/backend/api/media/${id}`)
-              .then(() => {
-                const index = this.$data.media.findIndex(m => m.id === id)
-                if (index >= 0) {
-                  this.$data.media.splice(index, 1)
-                }
-              })
-              .catch(console.log)
+          do: (index, media) => {
+            this.$store.dispatch(actions.DELETE_MEDIA, media)
           }
         },
         {

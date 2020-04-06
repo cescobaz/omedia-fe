@@ -7,14 +7,14 @@
           upload
         </div>
       </router-link>
-      <router-link to="/media" class="navigator-item">
-        <div>
-          media
-        </div>
-      </router-link>
       <router-link to="/to-import" class="navigator-item">
         <div>
           to import
+        </div>
+      </router-link>
+      <router-link to="/media" class="navigator-item">
+        <div>
+          media
         </div>
       </router-link>
     </div>
