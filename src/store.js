@@ -25,7 +25,7 @@ const store = {
   },
   mutations: {
     [mutations.SET_STATUS_MESSAGE] (state, message) {
-      state.statusMessage = `${new Date().toLocaleString()} - ${message}`
+      state.statusMessage = `${message} | ${new Date().toLocaleString()}`
     },
     [mutations.SET_MEDIA] (state, media) {
       state.media = media

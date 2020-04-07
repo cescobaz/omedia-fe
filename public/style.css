@@ -45,3 +45,27 @@ body, html, .router-link, a {
   color: #eeeeee;
   background-color: #222222;
 }
+
+.img-orientation-1, .img-horizontal {
+}
+.img-orientation-2, .img-horizontal-mirror {
+  transform: scale(-1,1);
+}
+.img-orientation-3, .img-rotate-180 {
+  transform: rotate(180deg);
+}
+.img-orientation-4, .img-vertical-mirror {
+  transform: scale(1,-1);
+}
+.img-orientation-5, .img-horizontal-mirror-rotate-270-cw {
+  transform: scale(-1,1) rotate(270deg);
+}
+.img-orientation-6, .img-rotate-90-cw {
+  transform: rotate(90deg);
+}
+.img-orientation-7, .img-horizontal-mirror-rotate-90-cw {
+  transform: scale(-1,1) rotate(90deg);
+}
+.img-orientation-8, .img-rotate-270-cw {
+  transform: rotate(270deg);
+}

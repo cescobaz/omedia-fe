@@ -8,7 +8,7 @@
             @click="toggleSelection(index, m)"
             :class="{ inverted: selections.indexOf(m.path) >= 0 }"
           >
-            <img :src="m.path" />
+            <img :src="m.path" :class="imgClass(m)" />
           </div>
           <ToolBar :actions="actions" :value="m" class="toolbar" />
         </div>
@@ -58,6 +58,12 @@ export default {
       } else {
         this.$data.selections.push(media.path)
       }
+    },
+    imgClass (media) {
+      if (media && media.metadata && media.metadata.orientation) {
+        return `img-orientation-${media.metadata.orientation}`
+      }
+      return ''
     }
   },
   watch: {

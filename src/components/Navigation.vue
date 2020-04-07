@@ -3,8 +3,9 @@
     <div class="wrapper">
       <Navigator class="navigator" />
       <div class="page">
-        <div class="header">
-          <div class="selected">{{ $route.path }} - {{ statusMessage }}</div>
+        <div class="selected header">
+          <div class="path">{{ $route.path }}</div>
+          <div class="status-message">{{ statusMessage }}</div>
         </div>
         <div class="content">
           <router-view></router-view>
@@ -54,16 +55,21 @@ export default {
 }
 .header {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: baseline;
   width: 100%;
   padding: 0;
+  margin: 0;
 }
-.header div {
+.path,
+.status-message {
   padding: 2px;
   margin: 0;
+}
+.status-message {
+  text-align: right;
 }
 .content {
   flex: 1;
