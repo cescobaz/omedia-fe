@@ -8,7 +8,7 @@
             @click="toggleSelection(index, m)"
             :class="{ inverted: selections.indexOf(m.path) >= 0 }"
           >
-            <img :src="m.path" :class="imgClass(m)" />
+            <img :src="imgSrc(m)" :class="imgClass(m)" />
           </div>
           <ToolBar :actions="actions" :value="m" class="toolbar" />
         </div>
@@ -59,6 +59,17 @@ export default {
         this.$data.selections.push(media.path)
       }
     },
+    imgSrc (media) {
+      if (Array.isArray(media.thumbnails) && media.thumbnails.length > 0) {
+        const thumbnail = media.thumbnails.find(
+          thumbnail => Math.max(thumbnail.width, thumbnail.height) >= 256
+        )
+        if (thumbnail && thumbnail.path) {
+          return thumbnail.path
+        }
+      }
+      return media.path
+    },
     imgClass (media) {
       if (media && media.metadata && media.metadata.orientation) {
         return `img-orientation-${media.metadata.orientation}`
@@ -108,8 +119,8 @@ export default {
   display: block;
 }
 .box {
-  height: 300px;
-  width: 300px;
+  height: 256px;
+  width: 256px;
   position: relative;
   font-size: 150%;
   margin: 16px;

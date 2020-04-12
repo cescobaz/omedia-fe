@@ -109,15 +109,18 @@ function getGenericMedia ({ state, commit }, { id, promise, resultMutations, loa
   commit(mutations.SET_STATUS_MESSAGE, loadingMessage)
   return promise(cancelToken)
     .then(response => {
-      const media = response.data.map(media => {
-        media.path = '/backend' + media.filePath
-        return media
+      response.data.forEach(media => {
+        media.path = 'backend/' + media.filePath
+        if (media.thumbnails) {
+          media.thumbnails.forEach(thumbnail => { thumbnail.path = 'backend/' + thumbnail.filePath })
+        }
       })
-      commit(resultMutations, media)
+      commit(resultMutations, response.data)
       commit(mutations.SET_STATUS_MESSAGE, loadedMessage)
     })
     .catch(error => {
       invalidCache(id, state)
+      commit(mutations.SET_STATUS_MESSAGE, error)
       console.log(error)
     })
 }
