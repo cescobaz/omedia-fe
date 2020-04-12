@@ -7,13 +7,15 @@
 <script>
 import EditorObject from './EditorObject'
 
-function parseName (name, regex = /([A-Z]?[a-z]+)/g, accumulator = []) {
-  const result = regex.exec(name)
-  if (!result) {
-    return accumulator.join(' ')
+function nameReplacer (match, p1, offset, string) {
+  if (!match) {
+    return string
   }
-  accumulator.push(result[1].toLowerCase())
-  return parseName(name, regex, accumulator)
+  return ' ' + p1.toLowerCase()
+}
+
+function parseName (name) {
+  return name.replace(/([A-Z])/g, nameReplacer)
 }
 function componentFromValue (value) {
   if (value === null || value === undefined) {
