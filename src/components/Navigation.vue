@@ -1,16 +1,18 @@
 <template>
   <div class="full-size">
     <div class="wrapper">
-      <Navigator class="navigator" />
-      <div class="page">
-        <div class="selected header">
-          <div class="path">{{ $route.path }}</div>
-          <div class="status-message">{{ statusMessage }}</div>
-        </div>
-        <div class="content">
-          <router-view></router-view>
+      <div class="content">
+        <Navigator class="navigator" />
+        <div class="page">
+          <div class="selected header">
+            <div class="path">{{ $route.path }}</div>
+          </div>
+          <div class="content">
+            <router-view></router-view>
+          </div>
         </div>
       </div>
+      <div class="status-message">{{ statusMessage }}</div>
     </div>
   </div>
 </template>
@@ -36,6 +38,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.content {
   position: relative;
   width: 100%;
   height: 100%;
@@ -69,7 +79,7 @@ export default {
   margin: 0;
 }
 .status-message {
-  text-align: right;
+  text-align: left;
 }
 .content {
   flex: 1;
