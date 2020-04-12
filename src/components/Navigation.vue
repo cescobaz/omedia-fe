@@ -12,7 +12,7 @@
           </div>
         </div>
       </div>
-      <div class="status-message">{{ statusMessage }}</div>
+      <div class="status-message">{{ status.message }}</div>
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
   data () {
     return {}
   },
-  computed: mapState(['statusMessage']),
+  computed: mapState(['status']),
   created () {}
 }
 </script>

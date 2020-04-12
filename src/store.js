@@ -2,7 +2,7 @@ const axios = require('axios')
 const CancelToken = axios.CancelToken
 
 const mutations = {
-  SET_STATUS_MESSAGE: 'SET_STATUS_MESSAGE',
+  SET_STATUS: 'SET_STATUS',
   SET_MEDIA: 'SET_MEDIA',
   SET_TO_IMPORT: 'SET_TO_IMPORT'
 }
@@ -17,15 +17,15 @@ const actions = {
 const store = {
   state: {
     cache: {},
-    statusMessage: 'Initialization ...',
+    status: { message: 'Initialization ...' },
     media: [],
     selectedMedia: [],
     toImport: [],
     selectedToImport: []
   },
   mutations: {
-    [mutations.SET_STATUS_MESSAGE] (state, message) {
-      state.statusMessage = `${new Date().toLocaleString()} | ${message}`
+    [mutations.SET_STATUS] (state, { message }) {
+      state.status = { message: `${new Date().toLocaleString()} | ${message}` }
     },
     [mutations.SET_MEDIA] (state, media) {
       state.media = media
@@ -54,7 +54,7 @@ const store = {
       })
     },
     [actions.DELETE_MEDIA] ({ state, commit }, { id }) {
-      commit(mutations.SET_STATUS_MESSAGE, 'deleting media ...')
+      commit(mutations.SET_STATUS, { message: 'deleting media ...' })
       return axios
         .delete(`/backend/api/media/${id}`)
         .then(() => {
@@ -63,13 +63,13 @@ const store = {
             const newMedia = [...state.media]
             newMedia.splice(index, 1)
             commit(mutations.SET_MEDIA, newMedia)
-            commit(mutations.SET_STATUS_MESSAGE, 'deleted media')
+            commit(mutations.SET_STATUS, { message: 'deleted media' })
           }
         })
         .catch(console.log)
     },
     [actions.IMPORT_MEDIA] ({ state, commit }, media) {
-      commit(mutations.SET_STATUS_MESSAGE, `importing ${media.length} media ...`)
+      commit(mutations.SET_STATUS, { message: `importing ${media.length} media ...` })
       return axios
         .post('/backend/api/media/', media.map(m => m.filePath))
         .then(response => {
@@ -85,7 +85,7 @@ const store = {
             indexes.push(index)
           })
           if (indexes.length === 0) {
-            commit(mutations.SET_STATUS_MESSAGE, `imported 0/${media.length} media`)
+            commit(mutations.SET_STATUS, { message: `imported 0/${media.length} media` })
             return
           }
           const newMedia = [...state.toImport]
@@ -93,7 +93,7 @@ const store = {
             newMedia.splice(index, 1)
           })
           commit(mutations.SET_TO_IMPORT, newMedia)
-          commit(mutations.SET_STATUS_MESSAGE, `imported ${indexes.length}/${media.length} media`)
+          commit(mutations.SET_STATUS, { message: `imported ${indexes.length}/${media.length} media` })
           invalidCache(actions.LOAD_MEDIA, state)
         })
         .catch(console.log)
@@ -106,7 +106,7 @@ function getGenericMedia ({ state, commit }, { id, promise, resultMutations, loa
   if (!cancelToken) {
     return
   }
-  commit(mutations.SET_STATUS_MESSAGE, loadingMessage)
+  commit(mutations.SET_STATUS, { message: loadingMessage })
   return promise(cancelToken)
     .then(response => {
       response.data.forEach(media => {
@@ -116,11 +116,11 @@ function getGenericMedia ({ state, commit }, { id, promise, resultMutations, loa
         }
       })
       commit(resultMutations, response.data)
-      commit(mutations.SET_STATUS_MESSAGE, loadedMessage)
+      commit(mutations.SET_STATUS, { message: loadedMessage })
     })
     .catch(error => {
       invalidCache(id, state)
-      commit(mutations.SET_STATUS_MESSAGE, error)
+      commit(mutations.SET_STATUS, { message: error })
       console.log(error)
     })
 }
