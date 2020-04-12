@@ -1,7 +1,7 @@
 <template>
   <div class="full-size">
     <div class="wrapper">
-      <div class="gallery">
+      <div unselectable="on" class="gallery unselectable">
         <div v-for="(m, index) in media" :key="m.path" class="box">
           <div
             class="box-centered"

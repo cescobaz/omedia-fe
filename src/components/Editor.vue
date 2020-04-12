@@ -69,8 +69,8 @@ function cleanMedia (media) {
   }
 }
 
-function defaultMerge () {
-  return { name: 'Media', value: [] }
+function defaultMerge (count = '') {
+  return { name: 'Media ' + count, value: [] }
 }
 
 export default {
@@ -84,12 +84,13 @@ export default {
   },
   computed: {
     merge () {
+      const count = this.media.length
       const merge = this.media
         .map(cleanMedia)
         .reduce(({ name, value }, media) => {
           return parseObject(media, name, value)
-        }, defaultMerge())
-      return discardNullComponent(merge) || defaultMerge()
+        }, defaultMerge(count))
+      return discardNullComponent(merge) || defaultMerge(count)
     }
   },
   methods: {},
