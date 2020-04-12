@@ -36,46 +36,61 @@ function parseObject (object, name, value = []) {
     displayName: parseName(name),
     component: componentFromValue(object)
   }
-  Object.keys(object).forEach(function (key) {
-    const value = object[key]
-    const component = componentFromValue(value)
-    const mustParseValue =
-      component === 'EditorObject' || component === 'EditorArray'
-    const index = result.value.findIndex(v => v.name === key)
-    if (index < 0) {
-      if (mustParseValue) {
-        result.value.push(parseObject(value, key))
-      } else {
-        result.value.push({
-          name: key,
-          value,
-          displayName: parseName(key),
-          component
-        })
+  Object.keys(object)
+    .sort()
+    .forEach(function (key) {
+      const value = object[key]
+      const component = componentFromValue(value)
+      const mustParseValue =
+        component === 'EditorObject' || component === 'EditorArray'
+      const index = result.value.findIndex(v => v.name === key)
+      if (index < 0) {
+        if (mustParseValue) {
+          result.value.push(parseObject(value, key))
+        } else {
+          result.value.push({
+            name: key,
+            value,
+            displayName: parseName(key),
+            component
+          })
+        }
+        return
       }
-      return
-    }
-    const attribute = result.value[index]
-    if (mustParseValue) {
-      result.value[index] = parseObject(value, key, attribute.value)
-      return
-    }
-    if (attribute.value !== value) {
-      attribute.value = 'multiple values'
-      attribute.multipleValues = true
-    }
-    attribute.component = attribute.component || component
-  })
+      const attribute = result.value[index]
+      if (mustParseValue) {
+        result.value[index] = parseObject(value, key, attribute.value)
+        return
+      }
+      if (attribute.value !== value) {
+        attribute.value = 'multiple values'
+        attribute.multipleValues = true
+      }
+      attribute.component = attribute.component || component
+    })
   return result
 }
-function discardNullComponent (object) {
-  if (!object.component) {
+function isEmptyValue (value) {
+  return (
+    !value.component ||
+    !value.value ||
+    (Array.isArray(value.value) && value.value.length === 0)
+  )
+}
+function isNotEmptyValue (object) {
+  return !isEmptyValue(object)
+}
+function discardEmptyValue (object) {
+  if (isEmptyValue(object)) {
     return null
   }
   if (Array.isArray(object.value)) {
-    const values = object.value.filter(v => !!v.component)
-    values.forEach(discardNullComponent)
+    object.value.forEach(discardEmptyValue)
+    const values = object.value.filter(isNotEmptyValue)
     object.value = values
+    if (values.length === 0) {
+      return null
+    }
   }
   return object
 }
@@ -110,7 +125,7 @@ export default {
         .reduce(({ name, value }, media) => {
           return parseObject(media, name, value)
         }, defaultMerge(count))
-      return discardNullComponent(merge) || defaultMerge(count)
+      return discardEmptyValue(merge) || defaultMerge(count)
     }
   },
   methods: {},
