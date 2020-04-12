@@ -5,15 +5,14 @@
         <div v-for="(m, index) in media" :key="m.path" class="box">
           <div
             class="box-centered"
-            @click="toggleSelection(index, m)"
-            :class="{ inverted: selections.indexOf(m.path) >= 0 }"
+            @click="toggleSelection(index, m, $event)"
+            :class="{ inverted: isSelected(m) }"
           >
             <img :src="imgSrc(m)" :class="imgClass(m)" />
           </div>
           <ToolBar :actions="actions" :value="m" class="toolbar" />
         </div>
       </div>
-      <ToolBar :label="toolbarLabel" :actions="selectionActions" />
     </div>
   </div>
 </template>
@@ -23,8 +22,13 @@ import ToolBar from './ToolBar.vue'
 export default {
   name: 'Gallery',
   props: {
+    value: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
     media: Array,
-    selected: Function,
     actions: Array
   },
   components: {
@@ -45,18 +49,23 @@ export default {
       ]
     }
   },
-  computed: {
-    toolbarLabel () {
-      return `selected ${this.$data.selections.length} media`
-    }
-  },
+  computed: {},
   methods: {
-    toggleSelection (index, media) {
-      const sIndex = this.$data.selections.indexOf(media.path)
+    isSelected (media) {
+      return this.value.findIndex(({ path }) => path === media.path) >= 0
+    },
+    toggleSelection (index, media, event) {
+      if (!event.shiftKey) {
+        this.$data.selections = [media]
+        return
+      }
+      const sIndex = this.$data.selections.findIndex(
+        ({ path }) => path === media.path
+      )
       if (sIndex >= 0) {
         this.$data.selections.splice(sIndex, 1)
       } else {
-        this.$data.selections.push(media.path)
+        this.$data.selections.push(media)
       }
     },
     imgSrc (media) {
@@ -79,9 +88,7 @@ export default {
   },
   watch: {
     selections (value) {
-      if (this.selected) {
-        this.selected(value)
-      }
+      this.$emit('input', value)
     }
   }
 }
