@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrapper">
-      <h3>{{ value.name }}</h3>
+      <h3>{{ value.displayName }}</h3>
       <div v-for="attribute in value.value" :key="attribute.name">
         <component :is="attribute.component" :value="attribute" />
       </div>
@@ -18,7 +18,7 @@ export default {
     value: {
       type: Object,
       default: function () {
-        return { name: 'Media', value: [] }
+        return { name: 'media', value: [] }
       }
     }
   },
@@ -31,4 +31,11 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+  margin-top: 8px;
+}
+.wrapper h3 {
+  margin-bottom: 2px;
+}
+</style>

@@ -66,7 +66,10 @@ const store = {
             commit(mutations.SET_STATUS, { message: 'deleted media' })
           }
         })
-        .catch(console.log)
+        .catch(error => {
+          commit(mutations.SET_STATUS, { message: error })
+          console.log(error)
+        })
     },
     [actions.IMPORT_MEDIA] ({ state, commit }, media) {
       commit(mutations.SET_STATUS, { message: `importing ${media.length} media ...` })
@@ -96,7 +99,10 @@ const store = {
           commit(mutations.SET_STATUS, { message: `imported ${indexes.length}/${media.length} media` })
           invalidCache(actions.LOAD_MEDIA, state)
         })
-        .catch(console.log)
+        .catch(error => {
+          commit(mutations.SET_STATUS, { message: error })
+          console.log(error)
+        })
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="wrapper">{{ value.name }}: {{ value.value }}</div>
+    <div class="wrapper">{{ value.displayName }}: {{ value.value }}</div>
   </div>
 </template>
 

@@ -7,6 +7,14 @@
 <script>
 import EditorObject from './EditorObject'
 
+function parseName (name, regex = /([A-Z]?[a-z]+)/g, accumulator = []) {
+  const result = regex.exec(name)
+  if (!result) {
+    return accumulator.join(' ')
+  }
+  accumulator.push(result[1].toLowerCase())
+  return parseName(name, regex, accumulator)
+}
 function componentFromValue (value) {
   if (value === null || value === undefined) {
     return null
@@ -20,7 +28,12 @@ function componentFromValue (value) {
   return 'EditorString'
 }
 function parseObject (object, name, value = []) {
-  const result = { name, value, component: componentFromValue(object) }
+  const result = {
+    name,
+    value,
+    displayName: parseName(name),
+    component: componentFromValue(object)
+  }
   Object.keys(object).forEach(function (key) {
     const value = object[key]
     const component = componentFromValue(value)
@@ -31,7 +44,12 @@ function parseObject (object, name, value = []) {
       if (mustParseValue) {
         result.value.push(parseObject(value, key))
       } else {
-        result.value.push({ name: key, value, component })
+        result.value.push({
+          name: key,
+          value,
+          displayName: parseName(key),
+          component
+        })
       }
       return
     }
@@ -70,7 +88,7 @@ function cleanMedia (media) {
 }
 
 function defaultMerge (count = '') {
-  return { name: 'Media ' + count, value: [] }
+  return { name: 'media ' + count, value: [] }
 }
 
 export default {
@@ -100,6 +118,8 @@ export default {
 
 <style scoped>
 .editor {
+  padding: 2px;
+  margin: 0;
   overflow: scroll;
 }
 </style>
