@@ -1,11 +1,11 @@
 <template>
   <div class="full-size">
     <div class="wrapper">
-      <div unselectable="on" class="gallery unselectable">
+      <div unselectable="on" class="gallery unselectable" @click="deselectAll">
         <div v-for="(m, index) in media" :key="m.path" class="box">
           <div
             class="box-centered"
-            @click="toggleSelection(index, m, $event)"
+            @click.stop="toggleSelection(index, m, $event)"
             :class="{ inverted: isSelected(m) }"
           >
             <img :src="imgSrc(m)" :class="imgClass(m)" />
@@ -54,6 +54,13 @@ export default {
     isSelected (media) {
       return this.indexOfSelection(media) >= 0
     },
+    indexOfSelection (media) {
+      return this.value.findIndex(({ path }) => path === media.path)
+    },
+    deselectAll () {
+      this.$data.selections = []
+      this.selectionChanged()
+    },
     select (index, media) {
       const selection = { index, media }
       this.$data.selections.push(selection)
@@ -77,9 +84,6 @@ export default {
         'input',
         this.$data.selections.map(({ media }) => media)
       )
-    },
-    indexOfSelection (media) {
-      return this.value.findIndex(({ path }) => path === media.path)
     },
     toggleSelection (index, media, event) {
       if (event.shiftKey) {
