@@ -29,11 +29,11 @@
   background-color: #222222;
 }
 .color, button, input  {
-  color: #eeeeee;
+  color: #cccccc;
 }
 .inverted, .selected, .router-link-active div, button, input{
   color: #222222;
-  background-color: #eeeeee;
+  background-color: #cccccc;
 }
 .selected, .router-link-active div, button, input {
   padding: 2px;
@@ -51,7 +51,7 @@ div {
   line-height: normal;
 }
 body, html, .router-link, a {
-  color: #eeeeee;
+  color: #cccccc;
   background-color: #222222;
 }
 
