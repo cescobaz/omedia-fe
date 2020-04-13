@@ -52,20 +52,82 @@ export default {
   computed: {},
   methods: {
     isSelected (media) {
-      return this.value.findIndex(({ path }) => path === media.path) >= 0
+      return this.indexOfSelection(media) >= 0
+    },
+    select (index, media) {
+      const selection = { index, media }
+      this.$data.selections.push(selection)
+      this.$data.selections.sort((a, b) => a.index - b.index)
+      this.selectionChanged()
+    },
+    selectInterval (startIndex, endIndex) {
+      console.log('select interval -------------', startIndex, endIndex)
+      const interval = this.media
+        .slice(startIndex, endIndex + 1)
+        .map((media, index) => {
+          return { index: index + startIndex, media }
+        })
+      console.log('select interval count', interval.length, interval)
+      this.$data.selections = this.$data.selections.concat(interval)
+      this.$data.selections.sort((a, b) => a.index - b.index)
+      this.selectionChanged()
+    },
+    selectionChanged () {
+      this.$emit(
+        'input',
+        this.$data.selections.map(({ media }) => media)
+      )
+    },
+    indexOfSelection (media) {
+      return this.value.findIndex(({ path }) => path === media.path)
     },
     toggleSelection (index, media, event) {
-      if (!event.shiftKey) {
-        this.$data.selections = [media]
+      if (event.shiftKey) {
+        this.toggleIntervalSelection(index, media)
+      } else if (event.metaKey || event.ctrlKey) {
+        this.toggleMultipleSelection(index, media)
+      } else {
+        this.toggleTrivialSelection(index, media)
+      }
+    },
+    toggleTrivialSelection (index, media) {
+      this.$data.selections = [{ index, media }]
+      this.selectionChanged()
+    },
+    toggleIntervalSelection (index, media) {
+      if (this.$data.selections.length === 0) {
+        this.select(index, media)
         return
       }
-      const sIndex = this.$data.selections.findIndex(
-        ({ path }) => path === media.path
-      )
+      if (this.isSelected(media)) {
+        return
+      }
+      let closeSelectedMediaIndex = null
+      for (const key in this.$data.selections) {
+        const { index: i } = this.$data.selections[key]
+        console.log('search', i)
+        if (i < index) {
+          closeSelectedMediaIndex = i
+        } else if (i > index) {
+          if (closeSelectedMediaIndex === null) {
+            closeSelectedMediaIndex = i
+          }
+          break
+        }
+      }
+      if (closeSelectedMediaIndex < index) {
+        this.selectInterval(closeSelectedMediaIndex + 1, index)
+      } else {
+        this.selectInterval(index, closeSelectedMediaIndex - 1)
+      }
+    },
+    toggleMultipleSelection (index, media) {
+      const sIndex = this.indexOfSelection(media)
       if (sIndex >= 0) {
         this.$data.selections.splice(sIndex, 1)
+        this.selectionChanged()
       } else {
-        this.$data.selections.push(media)
+        this.select(index, media)
       }
     },
     imgSrc (media) {
@@ -84,11 +146,6 @@ export default {
         return `img-orientation-${media.metadata.orientation}`
       }
       return ''
-    }
-  },
-  watch: {
-    selections (value) {
-      this.$emit('input', value)
     }
   }
 }
