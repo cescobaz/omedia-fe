@@ -3,43 +3,55 @@ const CancelToken = axios.CancelToken
 
 const mutations = {
   SET_STATUS: 'SET_STATUS',
+  TRIGGER_MEDIA: 'TRIGGER_MEDIA',
   SET_MEDIA: 'SET_MEDIA',
-  SET_TO_IMPORT: 'SET_TO_IMPORT'
+  SET_TO_IMPORT: 'SET_TO_IMPORT',
+  SET_TAGS: 'SET_TAGS'
 }
 
 const actions = {
   LOAD_MEDIA: 'LOAD_MEDIA',
   DELETE_MEDIA: 'DELETE_MEDIA',
   LOAD_TO_IMPORT: 'LOAD_TO_IMPORT',
-  IMPORT_MEDIA: 'IMPORT_MEDIA'
+  IMPORT_MEDIA: 'IMPORT_MEDIA',
+  LOAD_TAGS: 'LOAD_TAGS'
 }
 
 const store = {
   state: {
     cache: {},
     status: { message: 'Initialization ...' },
-    media: [],
+    media: {},
     selectedMedia: [],
     toImport: [],
-    selectedToImport: []
+    selectedToImport: [],
+    tags: []
   },
   mutations: {
     [mutations.SET_STATUS] (state, { message }) {
       state.status = { message: `${new Date().toLocaleString()} | ${message}` }
     },
-    [mutations.SET_MEDIA] (state, media) {
-      state.media = media
+    [mutations.TRIGGER_MEDIA] (state, { media, id }) {
+      state.media = { ...state.media }
     },
-    [mutations.SET_TO_IMPORT] (state, toImport) {
-      state.toImport = toImport
+    [mutations.SET_MEDIA] (state, { media, id }) {
+      state.media[id] = media
+      state.media = { ...state.media }
+    },
+    [mutations.SET_TO_IMPORT] (state, { media }) {
+      state.toImport = media
+    },
+    [mutations.SET_TAGS] (state, tags) {
+      state.tags = tags
     }
   },
   actions: {
-    [actions.LOAD_MEDIA] (context) {
+    [actions.LOAD_MEDIA] (context, query) {
+      const mediaId = JSON.stringify(query || {})
       return getGenericMedia(context, {
-        id: actions.LOAD_MEDIA,
-        promise: cancelToken => axios.get('/backend/api/media/', { cancelToken }),
-        resultMutations: mutations.SET_MEDIA,
+        id: actions.LOAD_MEDIA + mediaId,
+        promise: cancelToken => axios.get('/backend/api/media/', { params: query, cancelToken }),
+        resultMutations: { mutation: mutations.SET_MEDIA, arg: { id: mediaId } },
         loadingMessage: 'media loading ...',
         loadedMessage: 'media loaded'
       })
@@ -48,7 +60,7 @@ const store = {
       return getGenericMedia(context, {
         id: actions.LOAD_TO_IMPORT,
         promise: cancelToken => axios.get('/backend/api/to-import/', { cancelToken }),
-        resultMutations: mutations.SET_TO_IMPORT,
+        resultMutations: { mutation: mutations.SET_TO_IMPORT },
         loadingMessage: 'to-import loading ...',
         loadedMessage: 'to-import loaded'
       })
@@ -62,7 +74,7 @@ const store = {
           if (index >= 0) {
             const newMedia = [...state.media]
             newMedia.splice(index, 1)
-            commit(mutations.SET_MEDIA, newMedia)
+            commit(mutations.TRIGGER_MEDIA)
             commit(mutations.SET_STATUS, { message: 'deleted media' })
           }
         })
@@ -103,6 +115,24 @@ const store = {
           commit(mutations.SET_STATUS, { message: error })
           console.log(error)
         })
+    },
+    [actions.LOAD_TAGS] ({ state, commit }) {
+      const id = actions.LOAD_TAGS
+      const cancelToken = createCancelToken(id, state)
+      if (!cancelToken) {
+        return
+      }
+      commit(mutations.SET_STATUS, { message: 'loading tags ...' })
+      axios.get('backend/api/media/tags/', { cancelToken })
+        .then(response => {
+          commit(mutations.SET_TAGS, response.data)
+          commit(mutations.SET_STATUS, { message: 'tags loaded' })
+        })
+        .catch(error => {
+          invalidCache(id, state)
+          commit(mutations.SET_STATUS, { message: error })
+          console.log(error)
+        })
     }
   }
 }
@@ -121,7 +151,8 @@ function getGenericMedia ({ state, commit }, { id, promise, resultMutations, loa
           media.thumbnails.forEach(thumbnail => { thumbnail.path = 'backend/' + thumbnail.filePath })
         }
       })
-      commit(resultMutations, response.data)
+      const { mutation, arg } = resultMutations
+      commit(mutation, { ...arg, media: response.data })
       commit(mutations.SET_STATUS, { message: loadedMessage })
     })
     .catch(error => {

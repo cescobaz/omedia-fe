@@ -1,17 +1,15 @@
 <template>
   <div class="full-size">
-    <div class="wrapper">
-      <div unselectable="on" class="gallery unselectable" @click="deselectAll">
-        <div v-for="(m, index) in media" :key="m.path" class="box">
-          <div
-            class="box-centered"
-            @click.stop="toggleSelection(index, m, $event)"
-            :class="{ inverted: isSelected(m) }"
-          >
-            <img :src="imgSrc(m)" :class="imgClass(m)" />
-          </div>
-          <ToolBar :actions="actions" :value="m" class="toolbar" />
+    <div unselectable="on" class="wrapper unselectable" @click="deselectAll">
+      <div v-for="(m, index) in media" :key="m.path" class="box">
+        <div
+          class="box-centered"
+          @click.stop="toggleSelection(index, m, $event)"
+          :class="{ inverted: isSelected(m) }"
+        >
+          <img :src="imgSrc(m)" :class="imgClass(m)" />
         </div>
+        <ToolBar :actions="actions" :value="m" class="toolbar" />
       </div>
     </div>
   </div>
@@ -158,13 +156,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
-.gallery {
-  flex: 1;
   display: flex;
   flex-wrap: wrap;
   padding: 0;

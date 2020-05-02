@@ -7,14 +7,25 @@
           upload
         </div>
       </router-link>
-      <router-link to="/to-import" class="navigator-item">
+      <router-link to="/to-import" class="navigator-item" exact>
         <div>
           to import
         </div>
       </router-link>
-      <router-link to="/media" class="navigator-item">
+      <router-link to="/media" class="navigator-item" exact>
         <div>
           media
+        </div>
+      </router-link>
+      <router-link
+        v-for="tag in tags"
+        :key="tag.tag"
+        :to="to(tag)"
+        class="navigator-item"
+        exact
+      >
+        <div>
+          {{ tag.tag }}
         </div>
       </router-link>
     </div>
@@ -22,9 +33,21 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { actions } from '../store'
+
 export default {
   name: 'Navigator',
-  props: { section: String, sectionSelected: Function }
+  props: { section: String, sectionSelected: Function },
+  computed: mapState({ tags: 'tags' }),
+  mounted () {
+    this.$store.dispatch(actions.LOAD_TAGS)
+  },
+  methods: {
+    to ({ tag }) {
+      return { path: '/media/', query: { tags: tag } }
+    }
+  }
 }
 </script>
 

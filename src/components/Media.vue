@@ -30,7 +30,7 @@ export default {
       selected: [],
       actions: [
         {
-          label: 'delete',
+          label: 'trash',
           do: (index, media) => {
             this.$store.dispatch(actions.DELETE_MEDIA, media)
           }
@@ -44,9 +44,18 @@ export default {
       ]
     }
   },
-  computed: mapState({ media: 'media' }),
+  computed: mapState({
+    media: function (state) {
+      return state.media[JSON.stringify(this.$route.query || {})]
+    }
+  }),
   mounted () {
-    this.$store.dispatch(actions.LOAD_MEDIA)
+    this.$store.dispatch(actions.LOAD_MEDIA, this.$route.query)
+  },
+  watch: {
+    $route: function route (route) {
+      this.$store.dispatch(actions.LOAD_MEDIA, route.query)
+    }
   }
 }
 </script>
@@ -60,6 +69,7 @@ export default {
 }
 .gallery {
   height: 100%;
+  flex: 1;
 }
 .editor {
   width: 320px;
