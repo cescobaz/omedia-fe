@@ -39,8 +39,7 @@ const store = {
       state.media = { ...state.media }
     },
     [mutations.SET_MEDIA] (state, { media, id }) {
-      state.media[id] = media
-      state.media = { ...state.media }
+      state.media = { ...state.media, [id]: media }
     },
     [mutations.SET_TO_IMPORT] (state, { media }) {
       state.toImport = media
