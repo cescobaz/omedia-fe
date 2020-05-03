@@ -1,11 +1,13 @@
 <template>
   <div>
     <EditorObject class="editor" :value="merge" />
+    <EditorArrayChips :media="media" />
   </div>
 </template>
 
 <script>
 import EditorObject from './EditorObject'
+import EditorArrayChips from './EditorArrayChips'
 
 function nameReplacer (match, p1, offset, string) {
   if (!match) {
@@ -59,11 +61,19 @@ function parseObject (object, name, value = []) {
       }
       const attribute = result.value[index]
       if (mustParseValue) {
+        if (!Array.isArray(attribute.value) || !attribute.value) {
+          console.log('non è un array: ', attribute.value)
+          attribute.value = []
+        }
         result.value[index] = parseObject(value, key, attribute.value)
         return
       }
       if (attribute.value !== value) {
-        attribute.value = 'multiple values'
+        if (Array.isArray(attribute.value)) {
+          attribute.value.forEach(v => (v.value = '--multiple values--'))
+        } else {
+          attribute.value = 'multiple values'
+        }
         attribute.multipleValues = true
       }
       attribute.component = attribute.component || component
@@ -110,7 +120,7 @@ function defaultMerge (count = '') {
 
 export default {
   name: 'Editor',
-  components: { EditorObject },
+  components: { EditorObject, EditorArrayChips },
   props: {
     media: Array
   },

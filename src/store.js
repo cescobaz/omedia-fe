@@ -6,7 +6,9 @@ const mutations = {
   TRIGGER_MEDIA: 'TRIGGER_MEDIA',
   SET_MEDIA: 'SET_MEDIA',
   SET_TO_IMPORT: 'SET_TO_IMPORT',
-  SET_TAGS: 'SET_TAGS'
+  SET_TAGS: 'SET_TAGS',
+  ADD_TAGS: 'ADD_TAGS',
+  DELETE_TAG: 'DELETE_TAG'
 }
 
 const actions = {
@@ -14,7 +16,9 @@ const actions = {
   DELETE_MEDIA: 'DELETE_MEDIA',
   LOAD_TO_IMPORT: 'LOAD_TO_IMPORT',
   IMPORT_MEDIA: 'IMPORT_MEDIA',
-  LOAD_TAGS: 'LOAD_TAGS'
+  LOAD_TAGS: 'LOAD_TAGS',
+  ADD_TAGS: 'ADD_TAGS',
+  DELETE_TAG: 'DELETE_TAG'
 }
 
 const store = {
@@ -43,6 +47,12 @@ const store = {
     },
     [mutations.SET_TAGS] (state, tags) {
       state.tags = tags
+    },
+    [mutations.ADD_TAGS] (state, { media, tag }) {
+
+    },
+    [mutations.DELETE_TAG] (state, { media, tag }) {
+
     }
   },
   actions: {
@@ -123,7 +133,7 @@ const store = {
         return
       }
       commit(mutations.SET_STATUS, { message: 'loading tags ...' })
-      axios.get('backend/api/media/tags/', { cancelToken })
+      return axios.get('backend/api/media/tags/', { cancelToken })
         .then(response => {
           commit(mutations.SET_TAGS, response.data)
           commit(mutations.SET_STATUS, { message: 'tags loaded' })
@@ -133,6 +143,12 @@ const store = {
           commit(mutations.SET_STATUS, { message: error })
           console.log(error)
         })
+    },
+    [actions.ADD_TAGS] ({ state, commit }, { media, tags }) {
+      return axios.post('backend/api/media/tags', { media: media.map(m => m.id), tags: tags })
+    },
+    [actions.DELETE_TAG] ({ state, commit }) {
+
     }
   }
 }
