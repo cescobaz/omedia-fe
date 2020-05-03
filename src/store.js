@@ -52,13 +52,7 @@ const store = {
       state.toImport = media
     },
     [mutations.SET_TAGS] (state, tags) {
-      state.tags = tags
-    },
-    [mutations.ADD_TAGS] (state, { media, tag }) {
-
-    },
-    [mutations.DELETE_TAG] (state, { media, tag }) {
-
+      state.tags = tags.sort((a, b) => a.tag - b.tag)
     }
   },
   actions: {
@@ -134,7 +128,7 @@ const store = {
     },
     [actions.LOAD_TAGS] ({ state, commit }) {
       const id = actions.LOAD_TAGS
-      const cancelToken = createCancelToken(id, state)
+      const cancelToken = createCancelToken(id, state, 0)
       if (!cancelToken) {
         return
       }
@@ -150,30 +144,36 @@ const store = {
           console.log(error)
         })
     },
-    [actions.ADD_TAGS] ({ state, commit }, { media, tags }) {
+    [actions.ADD_TAGS] ({ state, commit, dispatch }, { media, tags }) {
       commit(mutations.SET_STATUS, { message: 'adding tags ...' })
       return axios.post('backend/api/media/tags', { media: media.map(m => m.id), tags: tags })
         .then(({ data }) => {
           normalizeMediaArray(data)
           commit(mutations.UPDATE_MEDIA, { media: data })
           commit(mutations.SET_STATUS, { message: 'tags added' })
+          dispatch(actions.LOAD_TAGS)
+          return data
         })
         .catch(error => {
           commit(mutations.SET_STATUS, { message: error })
           console.log(error)
+          return Promise.reject(error)
         })
     },
-    [actions.DELETE_TAG] ({ state, commit }, { media, tag }) {
+    [actions.DELETE_TAG] ({ state, commit, dispatch }, { media, tag }) {
       commit(mutations.SET_STATUS, { message: 'removing tags ...' })
       return axios.delete('backend/api/media/tags/', { data: { media: media.map(m => m.id), tags: [tag] } })
         .then(({ data }) => {
           normalizeMediaArray(data)
           commit(mutations.UPDATE_MEDIA, { media: data })
           commit(mutations.SET_STATUS, { message: 'tags removed' })
+          dispatch(actions.LOAD_TAGS)
+          return data
         })
         .catch(error => {
           commit(mutations.SET_STATUS, { message: error })
           console.log(error)
+          return Promise.reject(error)
         })
     }
   }
@@ -196,8 +196,11 @@ function updateMediaMap (state, { media }) {
 
 function normalizeMedia (media) {
   media.path = 'backend/' + media.filePath
-  if (media.thumbnails) {
+  if (Array.isArray(media.thumbnails)) {
     media.thumbnails.forEach(thumbnail => { thumbnail.path = 'backend/' + thumbnail.filePath })
+  }
+  if (Array.isArray(media.tags)) {
+    media.tags.sort()
   }
 }
 

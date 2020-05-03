@@ -13,6 +13,7 @@
       <input
         v-if="media.length !== 0"
         class="chip background color unselectable"
+        placeholder="tag"
         type="text"
         @keyup.enter="onEnter"
       />

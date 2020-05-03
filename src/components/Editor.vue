@@ -1,13 +1,13 @@
 <template>
   <div>
     <EditorObject class="editor" :value="merge" />
-    <EditorArrayChips :media="media" />
+    <TagsEditor :media="media" />
   </div>
 </template>
 
 <script>
 import EditorObject from './EditorObject'
-import EditorArrayChips from './EditorArrayChips'
+import TagsEditor from './TagsEditor'
 
 function nameReplacer (match, p1, offset, string) {
   if (!match) {
@@ -120,7 +120,7 @@ function defaultMerge (count = '') {
 
 export default {
   name: 'Editor',
-  components: { EditorObject, EditorArrayChips },
+  components: { EditorObject, TagsEditor },
   props: {
     media: Array
   },
