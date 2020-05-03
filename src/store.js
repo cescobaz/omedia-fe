@@ -42,11 +42,6 @@ const store = {
     },
     [mutations.UPDATE_MEDIA] (state, { media }) {
       updateMediaMap(state, { media })
-      state.media = Object.keys(state.media).reduce((list, key) => {
-        const mediaList = list[key]
-        list[key] = mediaList.map(m => state.mediaMap[m.id])
-        return list
-      }, { ...state.media })
     },
     [mutations.SET_MEDIA] (state, { media, id }) {
       updateMediaMap(state, { media })
