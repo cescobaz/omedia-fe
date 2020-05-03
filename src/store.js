@@ -5,6 +5,7 @@ const mutations = {
   SET_STATUS: 'SET_STATUS',
   TRIGGER_MEDIA: 'TRIGGER_MEDIA',
   SET_MEDIA: 'SET_MEDIA',
+  UPDATE_MEDIA: 'UPDATE_MEDIA',
   SET_TO_IMPORT: 'SET_TO_IMPORT',
   SET_TAGS: 'SET_TAGS',
   ADD_TAGS: 'ADD_TAGS',
@@ -26,6 +27,7 @@ const store = {
     cache: {},
     status: { message: 'Initialization ...' },
     media: {},
+    mediaMap: {},
     selectedMedia: [],
     toImport: [],
     selectedToImport: [],
@@ -38,8 +40,18 @@ const store = {
     [mutations.TRIGGER_MEDIA] (state, { media, id }) {
       state.media = { ...state.media }
     },
+    [mutations.UPDATE_MEDIA] (state, { media }) {
+      updateMediaMap(state, { media })
+      state.media = Object.keys(state.media).reduce((list, key) => {
+        const mediaList = list[key]
+        list[key] = mediaList.map(m => state.mediaMap[m.id])
+        return list
+      }, { ...state.media })
+    },
     [mutations.SET_MEDIA] (state, { media, id }) {
-      state.media = { ...state.media, [id]: media }
+      updateMediaMap(state, { media })
+      const refMedia = media.map(m => state.mediaMap[m.id])
+      state.media = { ...state.media, [id]: refMedia }
     },
     [mutations.SET_TO_IMPORT] (state, { media }) {
       state.toImport = media
@@ -144,12 +156,58 @@ const store = {
         })
     },
     [actions.ADD_TAGS] ({ state, commit }, { media, tags }) {
+      commit(mutations.SET_STATUS, { message: 'adding tags ...' })
       return axios.post('backend/api/media/tags', { media: media.map(m => m.id), tags: tags })
+        .then(({ data }) => {
+          normalizeMediaArray(data)
+          commit(mutations.UPDATE_MEDIA, { media: data })
+          commit(mutations.SET_STATUS, { message: 'tags added' })
+        })
+        .catch(error => {
+          commit(mutations.SET_STATUS, { message: error })
+          console.log(error)
+        })
     },
     [actions.DELETE_TAG] ({ state, commit }, { media, tag }) {
+      commit(mutations.SET_STATUS, { message: 'removing tags ...' })
       return axios.delete('backend/api/media/tags/', { data: { media: media.map(m => m.id), tags: [tag] } })
+        .then(({ data }) => {
+          normalizeMediaArray(data)
+          commit(mutations.UPDATE_MEDIA, { media: data })
+          commit(mutations.SET_STATUS, { message: 'tags removed' })
+        })
+        .catch(error => {
+          commit(mutations.SET_STATUS, { message: error })
+          console.log(error)
+        })
     }
   }
+}
+
+function updateMediaMap (state, { media }) {
+  state.mediaMap = media.reduce((map, m) => {
+    if (!m.id) {
+      return map
+    }
+    const existingMedia = map[m.id]
+    if (existingMedia) {
+      Object.assign(existingMedia, m)
+    } else {
+      map[m.id] = m
+    }
+    return map
+  }, { ...state.mediaMap })
+}
+
+function normalizeMedia (media) {
+  media.path = 'backend/' + media.filePath
+  if (media.thumbnails) {
+    media.thumbnails.forEach(thumbnail => { thumbnail.path = 'backend/' + thumbnail.filePath })
+  }
+}
+
+function normalizeMediaArray (media) {
+  media.forEach(normalizeMedia)
 }
 
 function getGenericMedia ({ state, commit }, { id, promise, resultMutations, loadingMessage, loadedMessage }) {
@@ -160,12 +218,7 @@ function getGenericMedia ({ state, commit }, { id, promise, resultMutations, loa
   commit(mutations.SET_STATUS, { message: loadingMessage })
   return promise(cancelToken)
     .then(response => {
-      response.data.forEach(media => {
-        media.path = 'backend/' + media.filePath
-        if (media.thumbnails) {
-          media.thumbnails.forEach(thumbnail => { thumbnail.path = 'backend/' + thumbnail.filePath })
-        }
-      })
+      normalizeMediaArray(response.data)
       const { mutation, arg } = resultMutations
       commit(mutation, { ...arg, media: response.data })
       commit(mutations.SET_STATUS, { message: loadedMessage })

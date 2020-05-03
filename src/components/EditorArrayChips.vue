@@ -39,6 +39,9 @@ export default {
   methods: {
     onEnter (event) {
       const id = event.target.value.trim()
+      if (id === '') {
+        return
+      }
       event.target.value = ''
       const chip = this.$data.chips[id] || { id, count: 0 }
       chip.count = this.media.length
