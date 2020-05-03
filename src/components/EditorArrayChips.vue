@@ -5,6 +5,7 @@
         class="chip background color unselectable"
         v-for="id in Object.keys(chips)"
         :key="id"
+        :class="chips[id].class"
       >
         {{ id }} ({{ chips[id].count }})
         <span @click.stop="onDelete(id)">x</span>
@@ -40,9 +41,16 @@ export default {
       event.target.value = ''
       const chip = this.$data.chips[id] || { id, count: 0 }
       chip.count = this.media.length
-      this.$data.chips[id] = chip
-      this.$data.chips = { ...this.$data.chips }
-      this.$store.dispatch(actions.ADD_TAGS, { media: this.media, tags: [id] })
+      chip.class = 'loading'
+      this.$set(this.$data.chips, id, chip)
+      this.$store
+        .dispatch(actions.ADD_TAGS, { media: this.media, tags: [id] })
+        .then(() => {
+          chip.class = ''
+        })
+        .catch(() => {
+          chip.class = 'error'
+        })
     },
     onDelete (tag) {
       console.log('delete', tag)
@@ -84,5 +92,8 @@ export default {
 .wrapper input {
   min-width: 30px;
   flex-grow: 2;
+}
+.loading {
+  color: #aaaaaa;
 }
 </style>
