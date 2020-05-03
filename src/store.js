@@ -146,8 +146,8 @@ const store = {
     [actions.ADD_TAGS] ({ state, commit }, { media, tags }) {
       return axios.post('backend/api/media/tags', { media: media.map(m => m.id), tags: tags })
     },
-    [actions.DELETE_TAG] ({ state, commit }) {
-
+    [actions.DELETE_TAG] ({ state, commit }, { media, tag }) {
+      return axios.delete('backend/api/media/tags/', { data: { media: media.map(m => m.id), tags: [tag] } })
     }
   }
 }

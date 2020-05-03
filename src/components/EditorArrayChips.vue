@@ -11,6 +11,7 @@
         <span @click.stop="onDelete(id)">x</span>
       </div>
       <input
+        v-if="media.length !== 0"
         class="chip background color unselectable"
         type="text"
         @keyup.enter="onEnter"
@@ -46,14 +47,27 @@ export default {
       this.$store
         .dispatch(actions.ADD_TAGS, { media: this.media, tags: [id] })
         .then(() => {
-          chip.class = ''
+          this.$set(this.$data.chips[id], 'class', '')
         })
         .catch(() => {
-          chip.class = 'error'
+          this.$set(this.$data.chips[id], 'class', 'error')
         })
     },
-    onDelete (tag) {
-      console.log('delete', tag)
+    onDelete (id) {
+      const chip = this.$data.chips[id]
+      if (!chip) {
+        console.log('error', 'onDelete', `no chip for id ${id}`)
+        return
+      }
+      this.$set(this.$data.chips[id], 'class', 'loading')
+      this.$store
+        .dispatch(actions.DELETE_TAG, { media: this.media, tag: id })
+        .then(() => {
+          this.$delete(this.$data.chips, id)
+        })
+        .catch(() => {
+          this.$set(this.$data.chips[id], 'class', 'error')
+        })
     }
   },
   watch: {
@@ -95,5 +109,8 @@ export default {
 }
 .loading {
   color: #aaaaaa;
+}
+.error {
+  color: #ffbbbb;
 }
 </style>
