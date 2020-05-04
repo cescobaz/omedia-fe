@@ -8,7 +8,7 @@
         v-model="selected"
         @scroll-limit="loadMoreMedia"
       />
-      <Editor class="editor inverted" :media="selected" />
+      <Editor class="editor" :media="selected" />
     </div>
   </div>
 </template>

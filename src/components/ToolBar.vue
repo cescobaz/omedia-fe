@@ -1,6 +1,6 @@
 <template>
-  <div class="selected">
-    <div class="font selected wrapper">
+  <div class="active">
+    <div class="font active wrapper">
       <div class="inverted label">{{ label }}</div>
       <div
         v-for="(action, index) in actions"

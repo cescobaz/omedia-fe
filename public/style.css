@@ -1,3 +1,6 @@
+.overflow-hidden {
+  overflow: hidden;
+}
 .unselectable {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -31,17 +34,27 @@
 .color, button, input  {
   color: #cccccc;
 }
-.inverted, .selected, .router-link-active div, button, input{
-  color: #222222;
+.inverted {
   background-color: #cccccc;
+  color: #222222;
 }
-.selected, .router-link-active div, button, input {
+.active, .router-link-active div {
+  color: #66FF8C;
+  background-color: #222222;
+}
+.selectable {
+}
+.selected {
+  color: #222222;
+  background-color: #66FF8C;
+}
+.active, .router-link-active div {
   padding: 2px;
   margin: 0;
   display: block;
 }
-.selected {
-  width: 100%;
+input {
+  background-color: #444444;
 }
 button, input {
   border: none;
@@ -51,6 +64,7 @@ div {
   line-height: normal;
 }
 body, html, .router-link, a {
+  overflow: hidden;
   color: #cccccc;
   background-color: #222222;
 }

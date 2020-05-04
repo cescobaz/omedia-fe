@@ -1,10 +1,10 @@
 <template>
-  <div class="full-size">
+  <div class="full-size overflow-hidden">
     <div class="wrapper">
       <div class="content">
         <Navigator class="navigator" />
         <div class="page">
-          <div class="selected header">
+          <div class="active header">
             <div class="path">{{ $route.path }}</div>
           </div>
           <div class="content">
@@ -44,6 +44,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  overflow: hidden;
 }
 .content {
   position: relative;
@@ -85,5 +86,6 @@ export default {
   flex: 1;
   width: 100%;
   overflow: scroll;
+  overflow-x: hidden;
 }
 </style>

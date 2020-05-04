@@ -10,11 +10,14 @@
         <div
           class="box-centered"
           @click.stop="toggleSelection(index, m, $event)"
-          :class="{ inverted: isSelected(m) }"
         >
           <img :src="imgSrc(m)" :class="imgClass(m)" />
         </div>
         <ToolBar :actions="actions" :value="m" class="toolbar" />
+        <div
+          class="selection selectable background"
+          :class="{ selected: isSelected(m) }"
+        />
       </div>
     </div>
   </div>
@@ -164,9 +167,11 @@ export default {
 .wrapper {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
   padding: 0;
   margin: 0;
   overflow: scroll;
+  overflow-x: hidden;
   width: 100%;
   height: 100%;
 }
@@ -176,6 +181,14 @@ export default {
   width: 100%;
   padding: 0;
   margin: 0;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+}
+.selection {
+  position: absolute;
+  width: 100%;
+  height: 2px;
   bottom: 0;
   left: 0;
   right: 0;

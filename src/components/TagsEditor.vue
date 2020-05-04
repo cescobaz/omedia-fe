@@ -2,7 +2,7 @@
   <div>
     <div class="wrapper">
       <div
-        class="chip background color unselectable"
+        class="chip unselectable"
         v-for="id in Object.keys(chips)"
         :key="id"
         :class="chips[id].class"
@@ -12,7 +12,7 @@
       </div>
       <input
         v-if="media.length !== 0"
-        class="chip background color unselectable"
+        class="chip unselectable"
         placeholder="tag"
         type="text"
         @keyup.enter="onEnter"

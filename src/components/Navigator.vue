@@ -1,7 +1,7 @@
 <template>
   <div class="full-height">
     <div class="full-height wrapper unselectable" unselectable="on">
-      <div class="selected title">omedia</div>
+      <div class="active title">omedia</div>
       <router-link to="/upload" class="navigator-item">
         <div>
           upload

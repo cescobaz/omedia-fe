@@ -41,12 +41,14 @@ export default {
   padding: 2px;
   margin: 0;
   overflow: scroll;
+  overflow-x: hidden;
 }
 .preview {
   display: flex;
   flex-wrap: wrap;
   max-height: 160px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 .preview div {
   width: 64px;
