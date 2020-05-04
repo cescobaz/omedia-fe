@@ -22,6 +22,7 @@
 
 <script>
 import ToolBar from './ToolBar.vue'
+import medialib from '../media'
 export default {
   name: 'Gallery',
   props: {
@@ -138,23 +139,8 @@ export default {
         this.select(index, media)
       }
     },
-    imgSrc (media) {
-      if (Array.isArray(media.thumbnails) && media.thumbnails.length > 0) {
-        const thumbnail = media.thumbnails.find(
-          thumbnail => Math.max(thumbnail.width, thumbnail.height) >= 256
-        )
-        if (thumbnail && thumbnail.path) {
-          return thumbnail.path
-        }
-      }
-      return media.path
-    },
-    imgClass (media) {
-      if (media && media.metadata && media.metadata.orientation) {
-        return `img-orientation-${media.metadata.orientation}`
-      }
-      return ''
-    },
+    imgSrc: medialib.thumbnailImgSrc(256),
+    imgClass: medialib.imgClass,
     onScroll (event) {
       const scroll = event.target.scrollTop / event.target.scrollTopMax
       if (this.$data.scrollThreasholdNotified) {
