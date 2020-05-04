@@ -1,6 +1,11 @@
 <template>
   <div class="full-size">
-    <div unselectable="on" class="wrapper unselectable" @click="deselectAll">
+    <div
+      unselectable="on"
+      class="wrapper unselectable"
+      @click="deselectAll"
+      @scroll="onScroll"
+    >
       <div v-for="(m, index) in media" :key="m.path" class="box">
         <div
           class="box-centered"
@@ -44,7 +49,8 @@ export default {
         },
         { label: 'delete', do: console.log },
         { label: 'present', do: console.log }
-      ]
+      ],
+      scrollThreasholdNotified: false
     }
   },
   computed: {},
@@ -148,6 +154,20 @@ export default {
         return `img-orientation-${media.metadata.orientation}`
       }
       return ''
+    },
+    onScroll (event) {
+      const scroll = event.target.scrollTop / event.target.scrollTopMax
+      if (this.$data.scrollThreasholdNotified) {
+        if (scroll < 0.6) {
+          this.$data.scrollThreasholdNotified = false
+        }
+        return
+      }
+      if (scroll > 0.7) {
+        console.log('LOAD MORE')
+        this.$emit('scroll-limit')
+        this.$data.scrollThreasholdNotified = true
+      }
     }
   }
 }

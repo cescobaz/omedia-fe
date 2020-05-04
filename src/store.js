@@ -5,6 +5,7 @@ const mutations = {
   SET_STATUS: 'SET_STATUS',
   TRIGGER_MEDIA: 'TRIGGER_MEDIA',
   SET_MEDIA: 'SET_MEDIA',
+  APPEND_MEDIA: 'APPEND_MEDIA',
   UPDATE_MEDIA: 'UPDATE_MEDIA',
   SET_TO_IMPORT: 'SET_TO_IMPORT',
   SET_TAGS: 'SET_TAGS',
@@ -14,6 +15,7 @@ const mutations = {
 
 const actions = {
   LOAD_MEDIA: 'LOAD_MEDIA',
+  LOAD_MORE_MEDIA: 'LOAD_MORE_MEDIA',
   DELETE_MEDIA: 'DELETE_MEDIA',
   LOAD_TO_IMPORT: 'LOAD_TO_IMPORT',
   IMPORT_MEDIA: 'IMPORT_MEDIA',
@@ -48,6 +50,12 @@ const store = {
       const refMedia = media.map(m => state.mediaMap[m.id])
       state.media = { ...state.media, [id]: refMedia }
     },
+    [mutations.APPEND_MEDIA] (state, { media, id }) {
+      updateMediaMap(state, { media })
+      const mediaList = state.media[id] || []
+      media.forEach(m => mediaList.push(state.mediaMap[m.id]))
+      state.media = { ...state.media, [id]: mediaList }
+    },
     [mutations.SET_TO_IMPORT] (state, { media }) {
       state.toImport = media
     },
@@ -60,8 +68,20 @@ const store = {
       const mediaId = JSON.stringify(query || {})
       return getGenericMedia(context, {
         id: actions.LOAD_MEDIA + mediaId,
-        promise: cancelToken => axios.get('/backend/api/media/', { params: query, cancelToken }),
+        promise: cancelToken => axios.get('backend/api/media/', { params: { ...query, offset: 0, limit: 25 }, cancelToken }),
         resultMutations: { mutation: mutations.SET_MEDIA, arg: { id: mediaId } },
+        loadingMessage: 'media loading ...',
+        loadedMessage: 'media loaded'
+      })
+    },
+    [actions.LOAD_MORE_MEDIA] (context, query) {
+      const mediaId = JSON.stringify(query || {})
+      const mediaList = context.state.media[mediaId]
+      const offset = mediaList ? mediaList.length : 0
+      return getGenericMedia(context, {
+        id: actions.LOAD_MORE_MEDIA + mediaId + offset,
+        promise: cancelToken => axios.get('backend/api/media/', { params: { ...query, offset, limit: 25 }, cancelToken }),
+        resultMutations: { mutation: mutations.APPEND_MEDIA, arg: { id: mediaId } },
         loadingMessage: 'media loading ...',
         loadedMessage: 'media loaded'
       })
@@ -69,7 +89,7 @@ const store = {
     [actions.LOAD_TO_IMPORT] (context) {
       return getGenericMedia(context, {
         id: actions.LOAD_TO_IMPORT,
-        promise: cancelToken => axios.get('/backend/api/to-import/', { cancelToken }),
+        promise: cancelToken => axios.get('backend/api/to-import/', { cancelToken }),
         resultMutations: { mutation: mutations.SET_TO_IMPORT },
         loadingMessage: 'to-import loading ...',
         loadedMessage: 'to-import loaded'

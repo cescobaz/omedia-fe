@@ -6,6 +6,7 @@
         :media="media"
         :actions="actions"
         v-model="selected"
+        @scroll-limit="loadMoreMedia"
       />
       <Editor class="editor inverted" :media="selected" />
     </div>
@@ -51,6 +52,11 @@ export default {
   }),
   mounted () {
     this.$store.dispatch(actions.LOAD_MEDIA, this.$route.query)
+  },
+  methods: {
+    loadMoreMedia () {
+      this.$store.dispatch(actions.LOAD_MORE_MEDIA, this.$route.query)
+    }
   },
   watch: {
     $route: function route (route) {

@@ -28,13 +28,11 @@ export default {
     }
   },
   data () {
-    return { merge: [] }
+    return {}
   },
-  computed: {},
-  methods: {},
-  watch: {
-    media (media) {
-      const merge = media
+  computed: {
+    merge () {
+      const merge = this.media
         .map(({ metadata }) => metadata)
         .reduce((map, metadata) => {
           return Object.keys(metadata).reduce((map, key) => {
@@ -62,11 +60,13 @@ export default {
             return map
           }, map)
         }, {})
-      this.$data.merge = Object.keys(merge)
+      return Object.keys(merge)
         .sort()
         .map(k => merge[k])
     }
-  }
+  },
+  methods: {},
+  watch: {}
 }
 </script>
 
