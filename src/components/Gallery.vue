@@ -1,12 +1,12 @@
 <template>
-  <div class="full-size">
+  <div>
     <div
       unselectable="on"
       class="wrapper unselectable"
       @click="deselectAll"
       @scroll="onScroll"
     >
-      <div v-for="(m, index) in media" :key="m.path" class="box">
+      <div v-for="(m, index) in media" :key="m.path" class="box margin-rb">
         <div
           class="box-centered"
           @click.stop="toggleSelection(index, m, $event)"
@@ -167,7 +167,6 @@ export default {
 .wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
   padding: 0;
   margin: 0;
   overflow: scroll;
@@ -201,7 +200,6 @@ export default {
   width: 256px;
   position: relative;
   font-size: 150%;
-  margin: 16px;
   padding: 0;
 }
 .box-centered {

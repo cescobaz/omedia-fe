@@ -1,8 +1,8 @@
 <template>
   <div class="full-size">
-    <div class="wrapper">
+    <div class="wrapper full-size">
       <Gallery
-        class="gallery"
+        class="gallery margin-r"
         :media="media"
         :actions="actions"
         v-model="selected"
@@ -70,14 +70,13 @@ export default {
 <style scoped>
 .wrapper {
   display: flex;
-  width: 100%;
-  height: 100%;
+  align-items: stretch;
+  justify-content: space-between;
 }
 .gallery {
-  height: 100%;
   flex: 1;
 }
 .editor {
-  width: 320px;
+  width: 250px;
 }
 </style>

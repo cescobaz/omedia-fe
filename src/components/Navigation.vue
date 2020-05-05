@@ -1,18 +1,13 @@
 <template>
   <div class="full-size overflow-hidden">
-    <div class="wrapper">
-      <div class="content">
-        <Navigator class="navigator" />
-        <div class="page">
-          <div class="active header">
-            <div class="path">{{ $route.path }}</div>
-          </div>
-          <div class="content">
-            <router-view></router-view>
-          </div>
+    <div class="wrapper full-size">
+      <div class="content margin-tl margin-b">
+        <Navigator class="navigator margin-r" />
+        <div class="page margin-r">
+          <router-view></router-view>
         </div>
       </div>
-      <div class="status-message">{{ status.message }}</div>
+      <div class="status-message margin-rb margin-l">{{ status.message }}</div>
     </div>
   </div>
 </template>
@@ -39,53 +34,26 @@ export default {
 <style scoped>
 .wrapper {
   position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
   overflow: hidden;
 }
 .content {
   position: relative;
-  width: 100%;
-  height: 100%;
+  flex: 1;
   display: flex;
-  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-between;
 }
 .navigator {
   width: 150px;
-  height: 100%;
 }
 .page {
-  height: 100%;
   flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-}
-.header {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
-.path,
-.status-message {
-  padding: 2px;
-  margin: 0;
 }
 .status-message {
   text-align: left;
-}
-.content {
-  flex: 1;
-  width: 100%;
-  overflow: scroll;
-  overflow-x: hidden;
 }
 </style>

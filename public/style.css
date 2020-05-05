@@ -20,6 +20,19 @@
  width: 100%;
  height: 100%;
 }
+.margin-t, .margin-tl {
+  margin-top: 32px;
+}
+.margin-r, .margin-rb {
+  margin-right: 32px;
+}
+.margin-b, .margin-rb {
+  margin-bottom: 32px;
+}
+.margin-l, .margin-tl {
+  margin-left: 32px;
+}
+
 .font, button, input, body, html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -62,6 +75,9 @@ button, input {
 }
 div {
   line-height: normal;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 body, html, .router-link, a {
   overflow: hidden;

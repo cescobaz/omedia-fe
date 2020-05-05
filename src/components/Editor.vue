@@ -1,15 +1,17 @@
 <template>
   <div>
-    <h3>{{ media.length }} media selected</h3>
-    <div class="preview">
-      <div v-for="m in media" :key="m.path">
-        <img :src="imgSrc(m)" :class="imgClass(m)" />
+    <div class="wrapper">
+      <h3>{{ media.length }} media selected</h3>
+      <div class="preview">
+        <div v-for="m in media" :key="m.path">
+          <img :src="imgSrc(m)" :class="imgClass(m)" />
+        </div>
       </div>
+      <h4>tags</h4>
+      <TagsEditor :media="media" />
+      <h4>metadata</h4>
+      <MetadataEditor :media="media" />
     </div>
-    <h4>tags</h4>
-    <TagsEditor :media="media" />
-    <h4>metadata</h4>
-    <MetadataEditor :media="media" />
   </div>
 </template>
 
@@ -37,8 +39,7 @@ export default {
 </script>
 
 <style scoped>
-.editor {
-  padding: 2px;
+.wrapper {
   margin: 0;
   overflow: scroll;
   overflow-x: hidden;
