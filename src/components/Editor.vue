@@ -2,17 +2,15 @@
   <div>
     <div class="wrapper">
       <h3>{{ media.length }} media selected</h3>
-      <div v-if="media.length !== 0">
-        <div class="preview">
-          <div v-for="m in media" :key="m.path">
-            <img :src="imgSrc(m)" :class="imgClass(m)" />
-          </div>
+      <div class="preview">
+        <div v-for="m in media" :key="m.path">
+          <img :src="imgSrc(m)" :class="imgClass(m)" />
         </div>
-        <h4>tags</h4>
-        <TagsEditor :media="media" />
-        <h4>metadata</h4>
-        <MetadataEditor :media="media" />
       </div>
+      <h4 v-if="media.length !== 0">tags</h4>
+      <TagsEditor :media="media" />
+      <h4 v-if="media.length !== 0">metadata</h4>
+      <MetadataEditor :media="media" />
     </div>
   </div>
 </template>
