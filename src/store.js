@@ -137,7 +137,7 @@ const store = {
           indexes.forEach(index => {
             newMedia.splice(index, 1)
           })
-          commit(mutations.SET_TO_IMPORT, newMedia)
+          commit(mutations.SET_TO_IMPORT, { media: newMedia })
           commit(mutations.SET_STATUS, { message: `imported ${indexes.length}/${media.length} media` })
           invalidCache(actions.LOAD_MEDIA, state)
         })

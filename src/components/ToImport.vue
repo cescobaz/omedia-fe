@@ -10,7 +10,7 @@ import { mapState } from 'vuex'
 import { actions } from '../store'
 
 export default {
-  name: 'Media',
+  name: 'ToImport',
   components: {
     Gallery
   },
