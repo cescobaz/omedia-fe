@@ -32,34 +32,34 @@ export default {
   },
   computed: {
     merge () {
-      const merge = this.media
-        .map(({ metadata }) => metadata)
-        .reduce((map, metadata) => {
-          return Object.keys(metadata).reduce((map, key) => {
-            const value = metadata[key]
-            const mapObject = map[key]
-            const mapValue = mapObject ? mapObject.value : undefined
-            if (!mapObject || mapValue === null || mapValue === undefined) {
-              map[key] = {
-                key,
-                keyLabel: parseName(key),
-                value,
-                values: [value]
-              }
-            } else if (mapObject.values > 1) {
-              mapObject.values.push(value)
-              mapObject.value = 'multiple values'
-            } else if (
-              value !== null &&
-              value !== undefined &&
-              value !== mapValue
-            ) {
-              mapObject.values.push(value)
+      const metadatas = this.media.map(({ metadata }) => metadata)
+      const keys = metadatas.reduce((keys, metadata) => {
+        if (!metadata) {
+          return keys
+        }
+        return keys.concat(Object.keys(metadata).filter(k => !!metadata[k]))
+      }, [])
+      const merge = metadatas.reduce((map, metadata) => {
+        return keys.reduce((map, key) => {
+          const value = (metadata ? metadata[key] : undefined) || undefined
+          const mapObject = map[key]
+          if (!mapObject) {
+            map[key] = {
+              key,
+              keyLabel: parseName(key),
+              value,
+              values: [value]
+            }
+          } else {
+            const index = mapObject.values.indexOf(value)
+            mapObject.values.push(value)
+            if (index < 0) {
               mapObject.value = 'multiple values'
             }
-            return map
-          }, map)
-        }, {})
+          }
+          return map
+        }, map)
+      }, {})
       return Object.keys(merge)
         .sort()
         .map(k => merge[k])
