@@ -6,14 +6,18 @@
       @click="deselectAll"
       @scroll="onScroll"
     >
-      <div v-for="(m, index) in media" :key="m.path" class="box margin-rb">
+      <div
+        v-for="(m, index) in media"
+        :key="m.id + m.path"
+        class="box margin-rb"
+      >
         <div
           class="box-centered"
           @click.stop="toggleSelection(index, m, $event)"
         >
           <img :src="imgSrc(m)" :class="imgClass(m)" />
         </div>
-        <ToolBar :actions="actions" :value="m" class="toolbar" />
+        <ToolBar :createActions="createActions" :value="m" class="toolbar" />
         <div
           class="selection selectable background"
           :class="{ selected: isSelected(m) }"
@@ -36,7 +40,7 @@ export default {
       }
     },
     media: Array,
-    actions: Array
+    createActions: Function
   },
   components: {
     ToolBar
@@ -44,16 +48,6 @@ export default {
   data () {
     return {
       selections: [],
-      selectionActions: [
-        {
-          label: 'deselect',
-          do: () => {
-            this.$data.selections = []
-          }
-        },
-        { label: 'delete', do: console.log },
-        { label: 'present', do: console.log }
-      ],
       scrollThreasholdNotified: false
     }
   },

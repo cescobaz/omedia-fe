@@ -33,8 +33,22 @@
   margin-left: 32px;
 }
 
+.padding-t, .padding-tl, .padding-a {
+  padding-top: 16px;
+}
+.padding-r, .padding-rb, .padding-a {
+  padding-right: 16px;
+}
+.padding-b, .padding-rb, .padding-a {
+  padding-bottom: 16px;
+}
+.padding-l, .padding-tl, .padding-a {
+  padding-left: 16px;
+}
+
 .font, button, input, body, html {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Muli","Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
@@ -51,7 +65,10 @@
   background-color: #cccccc;
   color: #222222;
 }
-.active, .router-link-active div {
+h1, h2, h3, h4 {
+  padding: 0px 2px 4px 2px;
+}
+.active, .router-link-active div, h1, h2, h3, h4  {
   color: #66FF8C;
   background-color: #222222;
 }
@@ -60,6 +77,7 @@
 .selected {
   color: #222222;
   background-color: #66FF8C;
+  border-bottom: 1px thin #66FF8C;
 }
 .active, .router-link-active div {
   padding: 2px;

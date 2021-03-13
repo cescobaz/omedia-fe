@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrapper unselectable" unselectable="on">
-      <div class="active title">omedia</div>
+      <h1>omedia</h1>
       <router-link to="/upload" class="navigator-item">
         <div>
           upload
@@ -58,9 +58,6 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-}
-.title {
-  margin: 0 0 16px 0px;
 }
 .navigator-item {
   border: none;

@@ -7,6 +7,7 @@ const mutations = {
   SET_MEDIA: 'SET_MEDIA',
   APPEND_MEDIA: 'APPEND_MEDIA',
   UPDATE_MEDIA: 'UPDATE_MEDIA',
+  DELETE_MEDIA: 'DELETE_MEDIA',
   SET_TO_IMPORT: 'SET_TO_IMPORT',
   SET_TAGS: 'SET_TAGS',
   ADD_TAGS: 'ADD_TAGS',
@@ -39,7 +40,7 @@ const store = {
     [mutations.SET_STATUS] (state, { message }) {
       state.status = { message: `${new Date().toLocaleString()} | ${message}` }
     },
-    [mutations.TRIGGER_MEDIA] (state, { media, id }) {
+    [mutations.TRIGGER_MEDIA] (state) {
       state.media = { ...state.media }
     },
     [mutations.UPDATE_MEDIA] (state, { media }) {
@@ -55,6 +56,23 @@ const store = {
       const mediaList = state.media[id] || []
       media.forEach(m => mediaList.push(state.mediaMap[m.id]))
       state.media = { ...state.media, [id]: mediaList }
+    },
+    [mutations.DELETE_MEDIA] (state, { mediaIds }) {
+      const media = { ...state.media }
+      const mediaMap = { ...state.mediaMap }
+      Object.keys(state.media).forEach(k => {
+        const mediaList = media[k]
+        mediaIds.forEach(id => {
+          const index = mediaList.findIndex(m => m.id === id)
+          if (index >= 0) {
+            mediaList.splice(index, 1)
+          }
+          media[k] = mediaList
+          delete mediaMap[id]
+        })
+      })
+      state.media = media
+      state.mediaMap = mediaMap
     },
     [mutations.SET_TO_IMPORT] (state, { media }) {
       state.toImport = media
@@ -95,18 +113,29 @@ const store = {
         loadedMessage: 'to-import loaded'
       })
     },
-    [actions.DELETE_MEDIA] ({ state, commit }, { id }) {
+    [actions.DELETE_MEDIA] ({ state, commit }, { mediaIds }) {
       commit(mutations.SET_STATUS, { message: 'deleting media ...' })
-      return axios
-        .delete(`/backend/api/media/${id}`)
-        .then(() => {
-          const index = state.media.findIndex(m => m.id === id)
-          if (index >= 0) {
-            const newMedia = [...state.media]
-            newMedia.splice(index, 1)
-            commit(mutations.TRIGGER_MEDIA)
-            commit(mutations.SET_STATUS, { message: 'deleted media' })
+      return Promise.all(mediaIds.map(id =>
+        axios.delete(`/backend/api/media/${id}`)
+          .then(() => { return { id } })
+          .catch(error => Promise.resolve({ id, error })
+          )))
+        .then((results) => {
+          const success = []
+          const errors = []
+          results.forEach(({ id, error }) => {
+            if (error) {
+              errors.push(JSON.stringify(error))
+            } else {
+              success.push(id)
+            }
+          })
+          commit(mutations.DELETE_MEDIA, { mediaIds: success })
+          let message = `deleted ${success.length}/${mediaIds.length} media`
+          if (errors.length > 0) {
+            message += ` (${errors.join(', ')})`
           }
+          commit(mutations.SET_STATUS, { message })
         })
         .catch(error => {
           commit(mutations.SET_STATUS, { message: error })
@@ -119,8 +148,10 @@ const store = {
         .post('/backend/api/media/', media.map(m => m.filePath))
         .then(response => {
           const indexes = []
+          const koResults = []
           response.data.forEach(result => {
             if (result.result !== 'ok') {
+              koResults.push(result.result)
               return
             }
             const index = state.toImport.findIndex(m => m.filePath === result.toImport)
@@ -130,7 +161,9 @@ const store = {
             indexes.push(index)
           })
           if (indexes.length === 0) {
-            commit(mutations.SET_STATUS, { message: `imported 0/${media.length} media` })
+            commit(mutations.SET_STATUS, {
+              message: `imported 0/${media.length} media (${koResults.join(', ')})`
+            })
             return
           }
           const newMedia = [...state.toImport]

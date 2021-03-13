@@ -3,7 +3,7 @@
     <div class="font active wrapper">
       <div class="inverted label">{{ label }}</div>
       <div
-        v-for="(action, index) in actions"
+        v-for="(action, index) in createActions(value)"
         :key="action.label"
         @click="action.do(index, value)"
         class="action"
@@ -22,7 +22,7 @@
 export default {
   name: 'ToolBar',
   components: {},
-  props: { label: String, actions: Array, value: Object },
+  props: { label: String, createActions: Function, value: Object },
   data () {
     return {}
   }

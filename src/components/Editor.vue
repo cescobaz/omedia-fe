@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="wrapper">
+    <div class="padding-a wrapper">
       <h3>{{ media.length }} media selected</h3>
       <div class="preview">
         <div v-for="m in media" :key="m.path">

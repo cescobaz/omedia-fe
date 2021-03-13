@@ -1,13 +1,13 @@
 <template>
   <div class="full-size overflow-hidden">
     <div class="wrapper full-size">
-      <div class="content margin-tl margin-b">
-        <Navigator class="navigator margin-r" />
-        <div class="page margin-r">
+      <div class="content">
+        <Navigator class="navigator padding-a" />
+        <div class="page">
           <router-view></router-view>
         </div>
       </div>
-      <div class="status-message margin-rb margin-l">{{ status.message }}</div>
+      <div class="status-message padding-a">{{ status.message }}</div>
     </div>
   </div>
 </template>

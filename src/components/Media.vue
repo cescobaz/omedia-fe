@@ -2,9 +2,9 @@
   <div class="full-size">
     <div class="wrapper full-size">
       <Gallery
-        class="gallery margin-r"
+        class="gallery padding-a"
         :media="media"
-        :actions="actions"
+        :createActions="createActions"
         v-model="selected"
         @scroll-limit="loadMoreMedia"
       />
@@ -19,6 +19,46 @@ import Editor from './Editor.vue'
 import { mapState } from 'vuex'
 import { actions } from '../store'
 
+function createActions (store) {
+  const deleteAction = {
+    label: 'delete',
+    do: (index, media) => {
+      store.dispatch(actions.DELETE_MEDIA, { mediaIds: [media.id] })
+    }
+  }
+
+  const untrashAction = {
+    label: 'untrash',
+    do: (index, media) => {
+      store.dispatch(actions.DELETE_TAG, {
+        media: [media],
+        tag: 'trash'
+      })
+    }
+  }
+  const trashAction = {
+    label: 'trash',
+    do: (index, media) => {
+      store.dispatch(actions.ADD_TAGS, {
+        media: [media],
+        tags: ['trash']
+      })
+    }
+  }
+  const presentAction = {
+    label: 'present',
+    do: (index, media) => {
+      window.open(media.path, '_blank')
+    }
+  }
+  return media => {
+    if (media.tags && media.tags.indexOf('trash') >= 0) {
+      return [deleteAction, untrashAction].concat([presentAction])
+    } else {
+      return [trashAction].concat([presentAction])
+    }
+  }
+}
 export default {
   name: 'Media',
   components: {
@@ -29,20 +69,7 @@ export default {
   data () {
     return {
       selected: [],
-      actions: [
-        {
-          label: 'trash',
-          do: (index, media) => {
-            this.$store.dispatch(actions.DELETE_MEDIA, media)
-          }
-        },
-        {
-          label: 'present',
-          do: (index, media) => {
-            window.open(media.path, '_blank')
-          }
-        }
-      ]
+      createActions: createActions(this.$store)
     }
   },
   computed: mapState({
