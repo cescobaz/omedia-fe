@@ -37,8 +37,12 @@ const store = {
     tags: []
   },
   mutations: {
-    [mutations.SET_STATUS] (state, { message }) {
-      state.status = { message: `${new Date().toLocaleString()} | ${message}` }
+    [mutations.SET_STATUS] (state, { message, error }) {
+      state.status = {
+        date: new Date().toLocaleString(),
+        message: message,
+        error: error
+      }
     },
     [mutations.TRIGGER_MEDIA] (state) {
       state.media = { ...state.media }
@@ -113,7 +117,7 @@ const store = {
         loadedMessage: 'to-import loaded'
       })
     },
-    [actions.DELETE_MEDIA] ({ state, commit }, { mediaIds }) {
+    [actions.DELETE_MEDIA] ({ state, dispatch, commit }, { mediaIds }) {
       commit(mutations.SET_STATUS, { message: 'deleting media ...' })
       return Promise.all(mediaIds.map(id =>
         axios.delete(`/backend/api/media/${id}`)
@@ -131,14 +135,15 @@ const store = {
             }
           })
           commit(mutations.DELETE_MEDIA, { mediaIds: success })
-          let message = `deleted ${success.length}/${mediaIds.length} media`
-          if (errors.length > 0) {
-            message += ` (${errors.join(', ')})`
-          }
-          commit(mutations.SET_STATUS, { message })
+          const message = `deleted ${success.length}/${mediaIds.length} media`
+          commit(mutations.SET_STATUS, {
+            message,
+            error: errors.length ? errors.join(', ') : undefined
+          })
+          dispatch(actions.LOAD_TAGS)
         })
         .catch(error => {
-          commit(mutations.SET_STATUS, { message: error })
+          commit(mutations.SET_STATUS, { error })
           console.log(error)
         })
     },
@@ -162,7 +167,8 @@ const store = {
           })
           if (indexes.length === 0) {
             commit(mutations.SET_STATUS, {
-              message: `imported 0/${media.length} media (${koResults.join(', ')})`
+              message: `imported 0/${media.length} media`,
+              error: koResults.length ? koResults.join(', ') : undefined
             })
             return
           }
@@ -171,11 +177,14 @@ const store = {
             newMedia.splice(index, 1)
           })
           commit(mutations.SET_TO_IMPORT, { media: newMedia })
-          commit(mutations.SET_STATUS, { message: `imported ${indexes.length}/${media.length} media` })
+          commit(mutations.SET_STATUS, {
+            message: `imported ${indexes.length}/${media.length} media`,
+            error: koResults.length ? koResults.join(', ') : undefined
+          })
           invalidCache(actions.LOAD_MEDIA, state)
         })
         .catch(error => {
-          commit(mutations.SET_STATUS, { message: error })
+          commit(mutations.SET_STATUS, { error })
           console.log(error)
         })
     },
@@ -193,7 +202,7 @@ const store = {
         })
         .catch(error => {
           invalidCache(id, state)
-          commit(mutations.SET_STATUS, { message: error })
+          commit(mutations.SET_STATUS, { error })
           console.log(error)
         })
     },
@@ -208,7 +217,7 @@ const store = {
           return data
         })
         .catch(error => {
-          commit(mutations.SET_STATUS, { message: error })
+          commit(mutations.SET_STATUS, { error })
           console.log(error)
           return Promise.reject(error)
         })
@@ -224,7 +233,7 @@ const store = {
           return data
         })
         .catch(error => {
-          commit(mutations.SET_STATUS, { message: error })
+          commit(mutations.SET_STATUS, { error })
           console.log(error)
           return Promise.reject(error)
         })
@@ -276,7 +285,7 @@ function getGenericMedia ({ state, commit }, { id, promise, resultMutations, loa
     })
     .catch(error => {
       invalidCache(id, state)
-      commit(mutations.SET_STATUS, { message: error })
+      commit(mutations.SET_STATUS, { error })
       console.log(error)
     })
 }

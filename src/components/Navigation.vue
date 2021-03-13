@@ -7,7 +7,12 @@
           <router-view></router-view>
         </div>
       </div>
-      <div class="status-message padding-a">{{ status.message }}</div>
+      <div class="status-message padding-a">
+        {{ status.date }} | {{ status.message }}
+        <span class="status-error">{{
+          status.error ? ` | ${status.error}` : ""
+        }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -55,5 +60,8 @@ export default {
 }
 .status-message {
   text-align: left;
+}
+.status-error {
+  color: red;
 }
 </style>

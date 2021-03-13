@@ -1,6 +1,6 @@
 <template>
   <div class="full-size">
-    <Gallery class="full-size" :media="media" :actions="actions" />
+    <Gallery class="full-size" :media="media" :createActions="createActions" />
   </div>
 </template>
 
@@ -8,6 +8,25 @@
 import Gallery from './Gallery.vue'
 import { mapState } from 'vuex'
 import { actions } from '../store'
+
+function createActions (store) {
+  return media => {
+    return [
+      {
+        label: 'import',
+        do: (index, media) => {
+          store.dispatch(actions.IMPORT_MEDIA, [media])
+        }
+      },
+      {
+        label: 'present',
+        do: (index, media) => {
+          window.open(media.path, '_blank')
+        }
+      }
+    ]
+  }
+}
 
 export default {
   name: 'ToImport',
@@ -18,20 +37,7 @@ export default {
   data () {
     return {
       section: 'media',
-      actions: [
-        {
-          label: 'import',
-          do: (index, media) => {
-            this.$store.dispatch(actions.IMPORT_MEDIA, [media])
-          }
-        },
-        {
-          label: 'present',
-          do: (index, media) => {
-            window.open(media.path, '_blank')
-          }
-        }
-      ]
+      createActions: createActions(this.$store)
     }
   },
   computed: mapState({ media: 'toImport' }),
