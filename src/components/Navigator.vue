@@ -3,17 +3,17 @@
     <div class="wrapper unselectable" unselectable="on">
       <h1>omedia</h1>
       <router-link to="/upload" class="navigator-item">
-        <div>
+        <div class="activable">
           upload
         </div>
       </router-link>
       <router-link to="/to-import" class="navigator-item" exact>
-        <div>
+        <div class="activable">
           to import
         </div>
       </router-link>
       <router-link to="/media" class="navigator-item" exact>
-        <div>
+        <div class="activable">
           media
         </div>
       </router-link>
@@ -24,7 +24,7 @@
         class="navigator-item"
         exact
       >
-        <div>
+        <div class="activable">
           {{ tag.tag }}
         </div>
       </router-link>
@@ -60,17 +60,10 @@ export default {
   align-items: flex-start;
 }
 .navigator-item {
-  border: none;
   text-decoration: none;
   position: relative;
   display: block;
-  padding: 2px 0;
-  margin: 0;
   cursor: pointer;
   width: 100%;
-}
-.navigator-item div {
-  margin: 0;
-  padding: 2px;
 }
 </style>

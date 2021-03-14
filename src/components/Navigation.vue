@@ -2,7 +2,7 @@
   <div class="full-size overflow-hidden">
     <div class="wrapper full-size">
       <div class="content">
-        <Navigator class="navigator padding-a" />
+        <Navigator class="navigator padding-t padding-b" />
         <div class="page">
           <router-view></router-view>
         </div>

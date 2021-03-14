@@ -54,6 +54,7 @@
   text-align: left;
   font-size: 14px;
   line-height: normal;
+  font-weight: 500;
 }
 .background, button, input {
   background-color: #222222;
@@ -68,21 +69,29 @@
 h1, h2, h3, h4 {
   padding: 0px 2px 4px 2px;
 }
-.active, .router-link-active div, h1, h2, h3, h4  {
-  color: #66FF8C;
-  background-color: #222222;
+.selectable-padding, .selectable, .activable {
+  padding: 8px 8px 8px 8px;
 }
-.selectable {
+.selectable-color:hover, .selectable:hover, .selectable-hover-background, .activable:hover {
+  background-color: #273129;
 }
 .selected {
-  color: #222222;
-  background-color: #66FF8C;
-  border-bottom: 1px thin #66FF8C;
+  color: #cccccc;
+  background-color: #2F4E37;
+}
+.activable {
+  border-left: 4px solid transparent;
+}
+.active, .router-link-active div, h1, h2, h3, h4  {
+  color: #49B865;
+  background-color: #222222;
 }
 .active, .router-link-active div {
-  padding: 2px;
+  padding: 8px;
   margin: 0;
   display: block;
+  border-left: 4px solid #49B865;
+  font-weight: bold;
 }
 input {
   background-color: #444444;

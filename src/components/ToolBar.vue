@@ -1,12 +1,12 @@
 <template>
-  <div class="active">
-    <div class="font active wrapper">
+  <div class="selectable-hover-background">
+    <div class="font wrapper">
       <div class="inverted label">{{ label }}</div>
       <div
         v-for="(action, index) in createActions(value)"
         :key="action.label"
         @click="action.do(index, value)"
-        class="action"
+        class="selectable-padding action"
         style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;"
         unselectable="on"
         onselectstart="return false;"

@@ -9,17 +9,19 @@
       <div
         v-for="(m, index) in media"
         :key="m.id + m.path"
-        class="box margin-rb"
+        class="box margin-rb selectable-color"
       >
         <div
-          class="box-centered"
+          class="box-centered selectable-padding"
           @click.stop="toggleSelection(index, m, $event)"
+          :class="{ selected: isSelected(m) }"
         >
           <img :src="imgSrc(m)" :class="imgClass(m)" />
         </div>
-        <ToolBar :createActions="createActions" :value="m" class="toolbar" />
-        <div
-          class="selection selectable background"
+        <ToolBar
+          :createActions="createActions"
+          :value="m"
+          class="toolbar"
           :class="{ selected: isSelected(m) }"
         />
       </div>
@@ -171,19 +173,11 @@ export default {
 .toolbar {
   display: none;
   position: absolute;
-  width: 100%;
+  width: calc(100% - 8px);
+  left: 4px;
   padding: 0;
   margin: 0;
-  bottom: 2px;
-  left: 0;
-  right: 0;
-}
-.selection {
-  position: absolute;
-  width: 100%;
-  height: 2px;
   bottom: 0;
-  left: 0;
   right: 0;
 }
 .box:hover .toolbar {
@@ -197,9 +191,8 @@ export default {
   padding: 0;
 }
 .box-centered {
-  padding: 2px;
-  height: calc(100% - 4px);
-  width: calc(100% - 4px);
+  height: calc(100% - 16px);
+  width: calc(100% - 16px);
   display: flex;
   justify-content: center;
   align-items: center;
