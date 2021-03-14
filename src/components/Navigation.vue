@@ -1,8 +1,11 @@
 <template>
   <div class="full-size overflow-hidden">
     <div class="wrapper full-size">
+      <div class="header section-border-b">
+        <Header />
+      </div>
       <div class="content">
-        <Navigator class="navigator padding-t padding-b" />
+        <Navigator class="navigator section-border-r" />
         <div class="page">
           <router-view></router-view>
         </div>
@@ -19,12 +22,14 @@
 
 <script>
 import Navigator from './Navigator.vue'
+import Header from './Header.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Navigation',
   components: {
-    Navigator
+    Navigator,
+    Header
   },
   props: {},
   data () {
@@ -41,19 +46,23 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   justify-content: space-between;
+  align-items: stretch;
+  align-content: stretch;
   overflow: hidden;
+}
+.header {
 }
 .content {
   position: relative;
   flex: 1;
+  flex-grow: 4;
   display: flex;
   align-items: stretch;
   justify-content: space-between;
 }
 .navigator {
-  width: 150px;
+  width: 200px;
 }
 .page {
   flex: 1;

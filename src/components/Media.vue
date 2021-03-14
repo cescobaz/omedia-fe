@@ -2,7 +2,7 @@
   <div class="full-size">
     <div class="wrapper full-size">
       <Gallery
-        class="gallery padding-a"
+        class="gallery"
         :media="media"
         :createActions="createActions"
         v-model="selected"

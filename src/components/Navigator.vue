@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="wrapper unselectable" unselectable="on">
-      <h1>omedia</h1>
+      <div class="navigator-section">
+        <h2>omedia</h2>
+      </div>
       <router-link to="/upload" class="navigator-item">
         <div class="activable">
           upload
@@ -17,6 +19,9 @@
           media
         </div>
       </router-link>
+      <div class="navigator-section">
+        <h2>tags</h2>
+      </div>
       <router-link
         v-for="tag in tags"
         :key="tag.tag"
@@ -59,11 +64,17 @@ export default {
   justify-content: flex-start;
   align-items: flex-start;
 }
-.navigator-item {
+.navigator-item,
+.navigator-section {
   text-decoration: none;
   position: relative;
   display: block;
-  cursor: pointer;
   width: 100%;
+}
+.navigator-item {
+  cursor: pointer;
+}
+.navigator-item div {
+  padding-left: 16px;
 }
 </style>
