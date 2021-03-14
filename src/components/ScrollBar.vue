@@ -31,11 +31,15 @@ export default {
       const { scrollTop, scrollTopMax } = this.scrollData
       const cursorHeight = Math.min(
         1.0,
-        Math.max(height / (scrollTopMax - height), 0.1)
+        Math.max(height / (height + scrollTopMax), 0.1)
       )
       const cursorHeightPercentage = `${cursorHeight * 100.0}%`
       this.$data.cursorHeight = cursorHeightPercentage
-      const top = (scrollTop / scrollTopMax) * (height - cursorHeight * height)
+      if (cursorHeight >= 1) {
+        return '0'
+      }
+      const cursorHeightPixel = cursorHeight * height
+      const top = (scrollTop / scrollTopMax) * (height - cursorHeightPixel)
       return `${top}px`
     }
   },
