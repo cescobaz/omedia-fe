@@ -1,37 +1,42 @@
 <template>
   <div>
-    <div
-      unselectable="on"
-      class="wrapper unselectable"
-      @click="deselectAll"
-      @scroll="onScroll"
-    >
+    <div class="custom-scroll full-size">
       <div
-        v-for="(m, index) in media"
-        :key="m.id + m.path"
-        class="box margin-rb selectable-color"
+        unselectable="on"
+        class="wrapper unselectable"
+        @click="deselectAll"
+        @scroll="onScroll"
       >
         <div
-          class="box-centered selectable-padding"
-          @click.stop="toggleSelection(index, m, $event)"
-          :class="{ selected: isSelected(m) }"
+          v-for="(m, index) in media"
+          :key="m.id + m.path"
+          class="box margin-rb selectable-color"
         >
-          <img :src="imgSrc(m)" :class="imgClass(m)" />
+          <div
+            class="box-centered selectable-padding"
+            @click.stop="toggleSelection(index, m, $event)"
+            :class="{ selected: isSelected(m) }"
+          >
+            <img :src="imgSrc(m)" :class="imgClass(m)" />
+          </div>
+          <ToolBar
+            :createActions="createActions"
+            :value="m"
+            class="toolbar"
+            :class="{ selected: isSelected(m) }"
+          />
         </div>
-        <ToolBar
-          :createActions="createActions"
-          :value="m"
-          class="toolbar"
-          :class="{ selected: isSelected(m) }"
-        />
       </div>
+      <ScrollBar class="custom-scrollbar" :scrollData="scrollData" />
     </div>
   </div>
 </template>
 
 <script>
 import ToolBar from './ToolBar.vue'
+import ScrollBar from './ScrollBar.vue'
 import medialib from '../media'
+
 export default {
   name: 'Gallery',
   props: {
@@ -45,12 +50,14 @@ export default {
     createActions: Function
   },
   components: {
-    ToolBar
+    ToolBar,
+    ScrollBar
   },
   data () {
     return {
       selections: [],
-      scrollThreasholdNotified: false
+      scrollThreasholdNotified: false,
+      scrollData: { scroll: 0, scrollTop: 0, scrollTopMax: 0 }
     }
   },
   computed: {},
@@ -142,6 +149,11 @@ export default {
     imgClass: medialib.imgClass,
     onScroll (event) {
       const scroll = event.target.scrollTop / event.target.scrollTopMax
+      this.$data.scrollData = {
+        scroll,
+        scrollTop: event.target.scrollTop,
+        scrollTopMax: event.target.scrollTopMax
+      }
       if (this.$data.scrollThreasholdNotified) {
         if (scroll < 0.6) {
           this.$data.scrollThreasholdNotified = false

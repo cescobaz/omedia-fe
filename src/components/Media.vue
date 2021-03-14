@@ -8,7 +8,7 @@
         v-model="selected"
         @scroll-limit="loadMoreMedia"
       />
-      <Editor class="editor" :media="selected" />
+      <Editor class="editor section-border-l" :media="selected" />
     </div>
   </div>
 </template>
