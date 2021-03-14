@@ -10,7 +10,7 @@
           <router-view></router-view>
         </div>
       </div>
-      <div class="status-message padding-a">
+      <div class="status-message padding-a section-border-t">
         {{ status.date }} | {{ status.message }}
         <span class="status-error">{{
           status.error ? ` | ${status.error}` : ""
