@@ -57,7 +57,7 @@ export default {
     return {
       selections: [],
       scrollThreasholdNotified: false,
-      scrollData: { scroll: 0, scrollTop: 0, scrollTopMax: 0 }
+      scrollData: { scroll: 0, scrollTop: 0, scrollHeight: 0 }
     }
   },
   computed: {},
@@ -148,11 +148,11 @@ export default {
     imgSrc: medialib.thumbnailImgSrc(256),
     imgClass: medialib.imgClass,
     onScroll (event) {
-      const scroll = event.target.scrollTop / event.target.scrollTopMax
+      const scroll = event.target.scrollTop / event.target.scrollHeight
       this.$data.scrollData = {
         scroll,
         scrollTop: event.target.scrollTop,
-        scrollTopMax: event.target.scrollTopMax
+        scrollHeight: event.target.scrollHeight
       }
       if (this.$data.scrollThreasholdNotified) {
         if (scroll < 0.6) {
@@ -172,6 +172,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.center {
+  margin: 0 5%;
+  background-color: red;
+}
 .wrapper {
   display: flex;
   flex-wrap: wrap;

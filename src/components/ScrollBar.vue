@@ -28,10 +28,10 @@ export default {
       }
       const height = this.$refs.scrollDiv.clientHeight
       this.$data.height = height
-      const { scrollTop, scrollTopMax } = this.scrollData
+      const { scrollTop, scrollHeight } = this.scrollData
       const cursorHeight = Math.min(
         1.0,
-        Math.max(height / (height + scrollTopMax), 0.1)
+        Math.max(height / (height + scrollHeight), 0.02)
       )
       const cursorHeightPercentage = `${cursorHeight * 100.0}%`
       this.$data.cursorHeight = cursorHeightPercentage
@@ -39,7 +39,8 @@ export default {
         return '0'
       }
       const cursorHeightPixel = cursorHeight * height
-      const top = (scrollTop / scrollTopMax) * (height - cursorHeightPixel)
+      const top =
+        (scrollTop / (scrollHeight - height)) * (height - cursorHeightPixel)
       return `${top}px`
     }
   },
