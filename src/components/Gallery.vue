@@ -1,30 +1,32 @@
 <template>
   <div>
     <div class="custom-scroll full-size">
-      <div
-        unselectable="on"
-        class="wrapper unselectable"
-        @click="deselectAll"
-        @scroll="onScroll"
-      >
+      <div class="custom-scroll-content">
         <div
-          v-for="(m, index) in media"
-          :key="m.id + m.path"
-          class="box margin-rb selectable-color"
+          unselectable="on"
+          class="wrapper unselectable"
+          @click="deselectAll"
+          @scroll="onScroll"
         >
           <div
-            class="box-centered selectable-padding"
-            @click.stop="toggleSelection(index, m, $event)"
-            :class="{ selected: isSelected(m) }"
+            v-for="(m, index) in media"
+            :key="m.id + m.path"
+            class="box margin-rb selectable-color"
           >
-            <img :src="imgSrc(m)" :class="imgClass(m)" />
+            <div
+              class="box-centered selectable-padding"
+              @click.stop="toggleSelection(index, m, $event)"
+              :class="{ selected: isSelected(m) }"
+            >
+              <img :src="imgSrc(m)" :class="imgClass(m)" />
+            </div>
+            <ToolBar
+              :createActions="createActions"
+              :value="m"
+              class="toolbar"
+              :class="{ selected: isSelected(m) }"
+            />
           </div>
-          <ToolBar
-            :createActions="createActions"
-            :value="m"
-            class="toolbar"
-            :class="{ selected: isSelected(m) }"
-          />
         </div>
       </div>
       <ScrollBar class="custom-scrollbar" :scrollData="scrollData" />
@@ -172,17 +174,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.center {
-  margin: 0 5%;
-  background-color: red;
-}
 .wrapper {
   display: flex;
   flex-wrap: wrap;
   padding: 0;
   margin: 0;
-  overflow: scroll;
-  overflow-x: hidden;
   width: 100%;
   height: 100%;
 }
