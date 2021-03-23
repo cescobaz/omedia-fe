@@ -1,32 +1,30 @@
 <template>
   <div>
     <div class="custom-scroll full-size">
-      <div class="custom-scroll-content">
+      <div
+        unselectable="on"
+        class="wrapper unselectable custom-scroll-content"
+        @click="deselectAll"
+        @scroll="onScroll"
+      >
         <div
-          unselectable="on"
-          class="wrapper unselectable"
-          @click="deselectAll"
-          @scroll="onScroll"
+          v-for="(m, index) in media"
+          :key="m.id + m.path"
+          class="box margin-rb selectable-color"
         >
           <div
-            v-for="(m, index) in media"
-            :key="m.id + m.path"
-            class="box margin-rb selectable-color"
+            class="box-centered selectable-padding"
+            @click.stop="toggleSelection(index, m, $event)"
+            :class="{ selected: isSelected(m) }"
           >
-            <div
-              class="box-centered selectable-padding"
-              @click.stop="toggleSelection(index, m, $event)"
-              :class="{ selected: isSelected(m) }"
-            >
-              <img :src="imgSrc(m)" :class="imgClass(m)" />
-            </div>
-            <ToolBar
-              :createActions="createActions"
-              :value="m"
-              class="toolbar"
-              :class="{ selected: isSelected(m) }"
-            />
+            <img :src="imgSrc(m)" :class="imgClass(m)" />
           </div>
+          <ToolBar
+            :createActions="createActions"
+            :value="m"
+            class="toolbar"
+            :class="{ selected: isSelected(m) }"
+          />
         </div>
       </div>
       <ScrollBar class="custom-scrollbar" :scrollData="scrollData" />
@@ -177,10 +175,9 @@ export default {
 .wrapper {
   display: flex;
   flex-wrap: wrap;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
 }
 .toolbar {
   display: none;
