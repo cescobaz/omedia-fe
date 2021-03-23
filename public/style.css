@@ -155,7 +155,6 @@ body, html, .router-link, a {
 ::-webkit-scrollbar {
     width: 13px;
     height: 13px;
-    background-color: red;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
 .custom-scroll div::-webkit-scrollbar {

@@ -5,7 +5,7 @@
         unselectable="on"
         class="wrapper unselectable custom-scroll-content"
         @click="deselectAll"
-        @scroll="onScroll"
+        @scroll.passive="onScroll"
       >
         <div
           v-for="(m, index) in media"
