@@ -2,16 +2,22 @@
   <div>
     <div class="wrapper">
       <h1>OMEDIA</h1>
+      {{ loading }}
       <h2>buro</h2>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Header',
   props: {},
-  computed: {},
+  computed: mapState({
+    loading: function (state) {
+      return state.loading
+    }
+  }),
   mounted () {},
   methods: {}
 }

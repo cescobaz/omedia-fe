@@ -7,12 +7,28 @@ import Media from './components/Media.vue'
 import ToImport from './components/ToImport.vue'
 import Upload from './components/Upload.vue'
 
-import { store } from './store'
+import { store, mutations } from './store'
+
+import axios from 'axios'
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
+
+const vueStore = new Vuex.Store(store)
+
+axios.interceptors.request.use(function (config) {
+  vueStore.commit(mutations.SET_LOADING, { loading: 1 })
+  return config
+})
+axios.interceptors.response.use(function (response) {
+  vueStore.commit(mutations.SET_LOADING, { loading: -1 })
+  return response
+}, function (error) {
+  vueStore.commit(mutations.SET_LOADING, { loading: -1 })
+  return Promise.reject(error)
+})
 
 const router = new VueRouter({
   routes: [
@@ -25,5 +41,5 @@ const router = new VueRouter({
 new Vue({
   render: h => h(App),
   router,
-  store: new Vuex.Store(store)
+  store: vueStore
 }).$mount('#app')

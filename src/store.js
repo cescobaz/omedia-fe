@@ -11,7 +11,8 @@ const mutations = {
   SET_TO_IMPORT: 'SET_TO_IMPORT',
   SET_TAGS: 'SET_TAGS',
   ADD_TAGS: 'ADD_TAGS',
-  DELETE_TAG: 'DELETE_TAG'
+  DELETE_TAG: 'DELETE_TAG',
+  SET_LOADING: 'SET_LOADING'
 }
 
 const actions = {
@@ -27,6 +28,7 @@ const actions = {
 
 const store = {
   state: {
+    loading: 0,
     cache: {},
     status: { message: 'Initialization ...' },
     media: {},
@@ -37,6 +39,9 @@ const store = {
     tags: []
   },
   mutations: {
+    [mutations.SET_LOADING] (state, { loading }) {
+      state.loading += loading
+    },
     [mutations.SET_STATUS] (state, { message, error }) {
       state.status = {
         date: new Date().toLocaleString(),
