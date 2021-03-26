@@ -9,7 +9,7 @@
           multiple
           @change="onFileChange"
         />
-        <input value="upload" type="submit" />
+        <input value="upload" type="submit" :disabled="uploading > 0" />
       </form>
       <div class="results">
         <div class="result" v-for="(result, index) in results" :key="index">
