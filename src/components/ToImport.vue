@@ -13,6 +13,12 @@ function createActions (store) {
   return media => {
     return [
       {
+        label: 'delete',
+        do: (index, media) => {
+          store.dispatch(actions.DELETE_MEDIA, { mediaIds: [media.id] })
+        }
+      },
+      {
         label: 'import',
         do: (index, media) => {
           store.dispatch(actions.IMPORT_MEDIA, [media])
