@@ -1,9 +1,9 @@
 <template>
   <div class="full-size">
-    <div class="wrapper">
-      <form @submit.prevent="onSubmit">
+    <div class="wrapper full-size">
+      <form class="section-border-b" @submit.prevent="onSubmit">
         <input
-          class="full-width"
+          class="input-file full-width"
           type="file"
           name="files"
           multiple
@@ -11,14 +11,14 @@
         />
         <input value="upload" type="submit" />
       </form>
-      <div v-if="!!result">
+      <div class="results" v-if="!!result">
         <h2>
           {{ result.date }}
         </h2>
         <table class="result-summary-table">
           <tr>
             <td>imported</td>
-            <td>{{ result.totalOk }}</td>
+            <td>{{ result.totalOk }} / {{ result.total }}</td>
           </tr>
           <tr>
             <td>not imported</td>
@@ -54,21 +54,7 @@ export default {
     return {
       section: 'media',
       files: [],
-      result: {
-        date: new Date().toLocaleString(),
-        totalOk: 10,
-        totalNotImported: 12,
-        results: [
-          { result: 'ok', filename: 'ciao.jpg', contentType: 'image' },
-          { result: 'ok', filename: 'ciao-2.jpg', contentType: 'image' },
-          {
-            result: 'skipped because exists',
-            filename: 'ciao-4.jpg',
-            contentType: 'image'
-          },
-          { result: 'ok', filename: 'vacanze.mov', contentType: 'video' }
-        ]
-      }
+      result: null
     }
   },
   methods: {
@@ -87,12 +73,14 @@ export default {
         })
         .then(response => {
           const results = response.data
+          const total = results.length
           const totalOk = results.filter(result => result.result === 'ok')
             .length
           this.result = {
             date: new Date().toLocaleString(),
+            total,
             totalOk,
-            totalNotImported: results.length - totalOk,
+            totalNotImported: total - totalOk,
             results
           }
         })
@@ -108,6 +96,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import "../assets/variables.scss";
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
 .wrapper form {
   display: flex;
   flex-direction: column;
@@ -119,6 +111,13 @@ export default {
 .wrapper form input {
   margin: 8px 0px;
   position: relative;
+}
+.input-file {
+  box-sizing: border-box;
+  padding: 16px;
+}
+.results {
+  overflow: scroll;
 }
 .result-summary-table,
 .results-table {
