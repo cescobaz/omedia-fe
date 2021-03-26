@@ -32,13 +32,13 @@ table td, table th{
 .margin-t, .margin-tl {
   margin-top: 32px;
 }
-.margin-r, .margin-rb {
+.margin-r, .margin-rb, .margin-lr {
   margin-right: 32px;
 }
 .margin-b, .margin-rb {
   margin-bottom: 32px;
 }
-.margin-l, .margin-tl {
+.margin-l, .margin-tl, .margin-lr {
   margin-left: 32px;
 }
 
@@ -160,10 +160,6 @@ body, html, .router-link, a {
 }
 .img-orientation-8, .img-rotate-270-cw {
   transform: rotate(270deg);
-}
-::-webkit-scrollbar {
-    width: 13px;
-    height: 13px;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
 .custom-scroll div::-webkit-scrollbar {

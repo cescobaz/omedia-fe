@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="custom-scroll full-size">
+    <div class="wrapper full-size">
       <div
         unselectable="on"
-        class="wrapper unselectable custom-scroll-content"
+        class="content full-size unselectable"
         @click="deselectAll"
         @scroll.passive="onScroll"
       >
@@ -27,14 +27,12 @@
           />
         </div>
       </div>
-      <ScrollBar class="custom-scrollbar" :scrollData="scrollData" />
     </div>
   </div>
 </template>
 
 <script>
 import ToolBar from './ToolBar.vue'
-import ScrollBar from './ScrollBar.vue'
 import medialib from '../media'
 
 export default {
@@ -50,8 +48,7 @@ export default {
     createActions: Function
   },
   components: {
-    ToolBar,
-    ScrollBar
+    ToolBar
   },
   data () {
     return {
@@ -173,6 +170,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .wrapper {
+}
+.content {
+  padding-left: 32px;
+  width: calc(100% - 32px);
+  overflow: scroll;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
