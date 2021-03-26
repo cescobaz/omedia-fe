@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 table {
   padding:0;
   margin:0;
@@ -53,7 +55,7 @@ table td, table th{
   padding-left: 16px;
 }
 .section-border-b, .section-border-t,  .section-border-l,  .section-border-r {
-  border-color: #2F4E37;
+  border-color: $selection-color;
   border-style: solid;
   border-width: 0;
 }
@@ -81,14 +83,14 @@ table td, table th{
   font-weight: 500;
 }
 .background, button, input {
-  background-color: #222222;
+  background-color: $background-color;
 }
 .color, button, input  {
-  color: #cccccc;
+  color: $foreground-color;
 }
 .inverted {
-  background-color: #cccccc;
-  color: #222222;
+  background-color: $foreground-color;
+  color: $background-color;
 }
 h1, h2, h3, h4 {
   padding: 8px 8px 8px 8px;
@@ -97,24 +99,24 @@ h1, h2, h3, h4 {
   padding: 8px 8px 8px 8px;
 }
 .selectable-color:hover, .selectable:hover, .selectable-hover-background, .activable:hover, .custom-scrollbar {
-  background-color: #273129;
+  background-color: $activable-color;
 }
 .selected {
-  color: #cccccc;
-  background-color: #2F4E37;
+  color: $foreground-color;
+  background-color: $selection-color;
 }
 .activable {
   border-left: 4px solid transparent;
 }
 .active, .router-link-active div, h1, h2, h3, h4 {
-  color: #49B865;
-  background-color: #222222;
+  color: $active-color;
+  background-color: $background-color;
 }
 .active, .router-link-active div {
   padding: 8px;
   margin: 0;
   display: block;
-  border-left: 4px solid #49B865;
+  border-left: 4px solid $active-color;
   font-weight: bold;
 }
 input {
@@ -132,8 +134,8 @@ div {
 }
 body, html, .router-link, a {
   overflow: hidden;
-  color: #cccccc;
-  background-color: #222222;
+  color: $foreground-color;
+  background-color: $background-color;
 }
 
 .img-orientation-1, .img-horizontal {
@@ -198,5 +200,5 @@ body, html, .router-link, a {
   height: 16px;
   left: 0;
   top: 0;
-  background-color: #49B865;
+  background-color: $active-color;
 }

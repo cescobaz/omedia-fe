@@ -15,23 +15,27 @@
         <h2>
           {{ result.date }}
         </h2>
-        <table>
+        <table class="result-summary-table">
           <tr>
             <td>imported</td>
             <td>{{ result.totalOk }}</td>
           </tr>
           <tr>
             <td>not imported</td>
-            <td>{{ result.totalNotImported }}</td>
+            <td :class="{ notOk: result.totalNotImported > 0 }">
+              {{ result.totalNotImported }}
+            </td>
           </tr>
         </table>
 
         <div>
-          <table>
+          <table class="results-table">
             <tr v-for="result in result.results" :key="result.filename">
-              <td>{{ result.contentType }}</td>
+              <td class="content-type">{{ result.contentType }}</td>
               <td>{{ result.filename }}</td>
-              <td>{{ result.result }}</td>
+              <td :class="{ notOk: !isOk(result), ok: isOk(result) }">
+                {{ result.result }}
+              </td>
             </tr>
           </table>
         </div>
@@ -51,6 +55,7 @@ export default {
       section: 'media',
       files: [],
       result: {
+        date: new Date().toLocaleString(),
         totalOk: 10,
         totalNotImported: 12,
         results: [
@@ -92,13 +97,17 @@ export default {
           }
         })
         .catch(console.log)
+    },
+    isOk (result) {
+      return result && result.result === 'ok'
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+@import "../assets/variables.scss";
 .wrapper form {
   display: flex;
   flex-direction: column;
@@ -110,5 +119,23 @@ export default {
 .wrapper form input {
   margin: 8px 0px;
   position: relative;
+}
+.result-summary-table,
+.results-table {
+  margin-left: 8px;
+}
+.result-summary-table {
+  margin-bottom: 8px;
+}
+.results-table {
+}
+.content-type {
+  color: gray;
+}
+.ok {
+  color: $success-color;
+}
+.notOk {
+  color: $error-color;
 }
 </style>
