@@ -14,9 +14,7 @@ export default {
   name: 'Header',
   props: {},
   computed: mapState({
-    loading: function (state) {
-      return state.loading
-    }
+    loading: 'loading'
   }),
   mounted () {},
   methods: {}

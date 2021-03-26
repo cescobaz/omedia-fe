@@ -11,33 +11,35 @@
         />
         <input value="upload" type="submit" />
       </form>
-      <div class="results" v-if="!!result">
-        <h2>
-          {{ result.date }}
-        </h2>
-        <table class="result-summary-table">
-          <tr>
-            <td>imported</td>
-            <td>{{ result.totalOk }} / {{ result.total }}</td>
-          </tr>
-          <tr>
-            <td>not imported</td>
-            <td :class="{ notOk: result.totalNotImported > 0 }">
-              {{ result.totalNotImported }}
-            </td>
-          </tr>
-        </table>
-
-        <div>
-          <table class="results-table">
-            <tr v-for="result in result.results" :key="result.filename">
-              <td class="content-type">{{ result.contentType }}</td>
-              <td>{{ result.filename }}</td>
-              <td :class="{ notOk: !isOk(result), ok: isOk(result) }">
-                {{ result.result }}
+      <div class="results">
+        <div class="result" v-for="(result, index) in results" :key="index">
+          <h2>
+            {{ result.date }}
+          </h2>
+          <table class="result-summary-table">
+            <tr>
+              <td>imported</td>
+              <td>{{ result.totalOk }} / {{ result.total }}</td>
+            </tr>
+            <tr>
+              <td>not imported</td>
+              <td :class="{ notOk: result.totalNotImported > 0 }">
+                {{ result.totalNotImported }}
               </td>
             </tr>
           </table>
+
+          <div>
+            <table class="results-table">
+              <tr v-for="result in result.results" :key="result.filename">
+                <td class="content-type">{{ result.contentType }}</td>
+                <td>{{ result.filename }}</td>
+                <td :class="{ notOk: !isOk(result), ok: isOk(result) }">
+                  {{ result.result }}
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -45,7 +47,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { actions } from '../store'
+import { mapState } from 'vuex'
 export default {
   name: 'Upload',
   components: {},
@@ -54,37 +57,27 @@ export default {
     return {
       section: 'media',
       files: [],
-      result: null
+      uploading: 0
     }
   },
+  computed: mapState({
+    results: function (state) {
+      return [...state.uploadResults].reverse()
+    }
+  }),
   methods: {
     onFileChange (event) {
-      console.log('onFileChange', this.files)
       this.files = event.target.files
-      console.log(this.files)
     },
     onSubmit (event) {
-      console.log('onSubmit')
-      const formData = new FormData()
-      this.files.forEach(file => formData.append('files', file))
-      axios
-        .post('backend/to-import/', formData, {
-          headers: { 'content-type': 'multipart/form-data' }
-        })
-        .then(response => {
-          const results = response.data
-          const total = results.length
-          const totalOk = results.filter(result => result.result === 'ok')
-            .length
-          this.result = {
-            date: new Date().toLocaleString(),
-            total,
-            totalOk,
-            totalNotImported: total - totalOk,
-            results
-          }
-        })
-        .catch(console.log)
+      if (!this.files || !this.files.length) {
+        return
+      }
+      this.uploading += 1
+      this.$store
+        .dispatch(actions.UPLOAD, { files: this.files })
+        .then(() => (this.uploading -= 1))
+        .catch(() => (this.uploading -= 1))
     },
     isOk (result) {
       return result && result.result === 'ok'
@@ -118,6 +111,8 @@ export default {
 }
 .results {
   overflow: scroll;
+}
+.result {
 }
 .result-summary-table,
 .results-table {

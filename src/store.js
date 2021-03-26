@@ -12,7 +12,9 @@ const mutations = {
   SET_TAGS: 'SET_TAGS',
   ADD_TAGS: 'ADD_TAGS',
   DELETE_TAG: 'DELETE_TAG',
-  SET_LOADING: 'SET_LOADING'
+  SET_LOADING: 'SET_LOADING',
+  SET_UPLOAD_RESULTS: 'SET_UPLOAD_RESULTS',
+  PUSH_UPLOAD_RESULT: 'PUSH_UPLOAD_RESULT'
 }
 
 const actions = {
@@ -23,7 +25,8 @@ const actions = {
   IMPORT_MEDIA: 'IMPORT_MEDIA',
   LOAD_TAGS: 'LOAD_TAGS',
   ADD_TAGS: 'ADD_TAGS',
-  DELETE_TAG: 'DELETE_TAG'
+  DELETE_TAG: 'DELETE_TAG',
+  UPLOAD: 'UPLOAD'
 }
 
 const store = {
@@ -36,7 +39,8 @@ const store = {
     selectedMedia: [],
     toImport: [],
     selectedToImport: [],
-    tags: []
+    tags: [],
+    uploadResults: []
   },
   mutations: {
     [mutations.SET_LOADING] (state, { loading }) {
@@ -88,6 +92,12 @@ const store = {
     },
     [mutations.SET_TAGS] (state, tags) {
       state.tags = tags.sort((a, b) => a.tag - b.tag)
+    },
+    [mutations.SET_UPLOAD_RESULTS] (state, results) {
+      state.uploadResults = results
+    },
+    [mutations.PUSH_UPLOAD_RESULT] (state, result) {
+      state.uploadResults = [...state.uploadResults, result]
     }
   },
   actions: {
@@ -236,6 +246,36 @@ const store = {
           commit(mutations.SET_STATUS, { message: 'tags removed' })
           dispatch(actions.LOAD_TAGS)
           return data
+        })
+        .catch(error => {
+          commit(mutations.SET_STATUS, { error })
+          console.log(error)
+          return Promise.reject(error)
+        })
+    },
+    [actions.UPLOAD] ({ state, commit }, { files }) {
+      const formData = new FormData()
+      files.forEach(file => formData.append('files', file))
+      commit(mutations.SET_STATUS, { message: 'uploading files ...' })
+      return axios
+        .post('backend/to-import/', formData, {
+          headers: { 'content-type': 'multipart/form-data' }
+        })
+        .then(response => {
+          const results = response.data
+          const total = results.length
+          const totalOk = results.filter(result => result.result === 'ok')
+            .length
+          const result = {
+            date: new Date().toLocaleString(),
+            total,
+            totalOk,
+            totalNotImported: total - totalOk,
+            results
+          }
+          commit(mutations.PUSH_UPLOAD_RESULT, result)
+          commit(mutations.SET_STATUS, { message: 'uploaded files' })
+          return result
         })
         .catch(error => {
           commit(mutations.SET_STATUS, { error })
