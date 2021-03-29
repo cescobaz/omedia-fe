@@ -6,6 +6,7 @@
         class="content full-size unselectable"
         @click="deselectAll"
         @scroll.passive="onScroll"
+        ref="content"
       >
         <div
           v-for="(m, index) in media"
@@ -53,8 +54,10 @@ export default {
   data () {
     return {
       selections: [],
-      scrollThreasholdNotified: false,
-      scrollData: { scroll: 0, scrollTop: 0, scrollHeight: 0 }
+      scrollLimitInfo: {
+        notified: false,
+        mediaLength: -1
+      }
     }
   },
   computed: {},
@@ -145,22 +148,25 @@ export default {
     imgSrc: medialib.thumbnailImgSrc(256),
     imgClass: medialib.imgClass,
     onScroll (event) {
-      const scroll = event.target.scrollTop / event.target.scrollHeight
-      this.$data.scrollData = {
-        scroll,
-        scrollTop: event.target.scrollTop,
-        scrollHeight: event.target.scrollHeight
+      const bottomScrollSpace =
+        event.target.scrollHeight -
+        event.target.scrollTop -
+        this.$refs.content.clientHeight * 2
+      if (
+        this.$data.scrollLimitInfo.notified &&
+        this.$data.scrollLimitInfo.mediaLength !== this.media.length
+      ) {
+        this.$data.scrollLimitInfo.notified = false
       }
-      if (this.$data.scrollThreasholdNotified) {
-        if (scroll < 0.6) {
-          this.$data.scrollThreasholdNotified = false
-        }
-        return
-      }
-      if (scroll > 0.7) {
-        console.log('LOAD MORE')
+      if (!this.$data.scrollLimitInfo.notified && bottomScrollSpace < 0) {
+        this.$data.scrollLimitInfo.notified = true
+        this.$data.scrollLimitInfo.mediaLength = this.media.length
+        console.log(
+          'scroll-limit notified',
+          JSON.stringify(this.$data.scrollLimitInfo),
+          bottomScrollSpace
+        )
         this.$emit('scroll-limit')
-        this.$data.scrollThreasholdNotified = true
       }
     }
   }
@@ -175,6 +181,7 @@ export default {
   padding-left: 32px;
   width: calc(100% - 32px);
   overflow: scroll;
+  overflow-x: hidden;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
