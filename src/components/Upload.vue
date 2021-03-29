@@ -111,6 +111,7 @@ export default {
 }
 .results {
   overflow: scroll;
+  overflow-x: hidden;
 }
 .result {
 }
