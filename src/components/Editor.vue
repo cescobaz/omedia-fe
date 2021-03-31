@@ -54,10 +54,6 @@ export default {
             do: () => {
               this.$store.commit(mutations.DESELECT_MEDIA, { media })
             }
-          },
-          {
-            label: 'show in collection',
-            do: () => {}
           }
         ]
       }
