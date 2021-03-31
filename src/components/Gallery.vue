@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="wrapper full-size">
+      <div class="placeholder" v-if="media && media.length === 0">
+        <div>no media</div>
+      </div>
       <div
+        v-if="media && media.length !== 0"
         unselectable="on"
         class="content full-size unselectable"
         @click="deselectAll"
@@ -177,6 +181,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .wrapper {
+}
+.placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.placeholder div {
+  text-align: center;
 }
 .content {
   padding-left: 32px;
