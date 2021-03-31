@@ -1,6 +1,13 @@
 <template>
   <div>
     <div class="wrapper">
+      <input
+        v-if="media.length !== 0"
+        class="chip unselectable"
+        placeholder="tag"
+        type="text"
+        @keyup.enter="onEnter"
+      />
       <div
         class="chip unselectable"
         v-for="id in Object.keys(chips)"
@@ -10,13 +17,6 @@
         {{ id }} ({{ chips[id].count }})
         <span @click.stop="onDelete(id)">x</span>
       </div>
-      <input
-        v-if="media.length !== 0"
-        class="chip unselectable"
-        placeholder="tag"
-        type="text"
-        @keyup.enter="onEnter"
-      />
     </div>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
   computed: {},
   methods: {
     onEnter (event) {
-      const id = event.target.value.trim()
+      const id = event.target.value.trim().toLowerCase()
       if (id === '') {
         return
       }
