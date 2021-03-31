@@ -8,6 +8,8 @@ const mutations = {
   APPEND_MEDIA: 'APPEND_MEDIA',
   UPDATE_MEDIA: 'UPDATE_MEDIA',
   DELETE_MEDIA: 'DELETE_MEDIA',
+  SET_SELECTED_MEDIA: 'SET_SELECTED_MEDIA',
+  DESELECT_MEDIA: 'DESELECT_MEDIA',
   SET_TO_IMPORT: 'SET_TO_IMPORT',
   SET_TAGS: 'SET_TAGS',
   ADD_TAGS: 'ADD_TAGS',
@@ -27,6 +29,10 @@ const actions = {
   ADD_TAGS: 'ADD_TAGS',
   DELETE_TAG: 'DELETE_TAG',
   UPLOAD: 'UPLOAD'
+}
+
+function hrefFromFilePath ({ filePath }) {
+  return `backend/${filePath}`
 }
 
 const store = {
@@ -86,6 +92,18 @@ const store = {
       })
       state.media = media
       state.mediaMap = mediaMap
+    },
+    [mutations.SET_SELECTED_MEDIA] (state, { media }) {
+      state.selectedMedia = media
+    },
+    [mutations.DESELECT_MEDIA] (state, { media }) {
+      const index = state.selectedMedia.findIndex(({ path }) => path === media.path)
+      if (index < 0) {
+        return
+      }
+      const selectedMedia = [...state.selectedMedia]
+      selectedMedia.splice(index, 1)
+      state.selectedMedia = selectedMedia
     },
     [mutations.SET_TO_IMPORT] (state, { media }) {
       state.toImport = media
@@ -302,9 +320,9 @@ function updateMediaMap (state, { media }) {
 }
 
 function normalizeMedia (media) {
-  media.path = 'backend/' + media.filePath
+  media.path = hrefFromFilePath(media)
   if (Array.isArray(media.thumbnails)) {
-    media.thumbnails.forEach(thumbnail => { thumbnail.path = 'backend/' + thumbnail.filePath })
+    media.thumbnails.forEach(thumbnail => { thumbnail.path = hrefFromFilePath(thumbnail) })
   }
   if (Array.isArray(media.tags)) {
     media.tags.sort()

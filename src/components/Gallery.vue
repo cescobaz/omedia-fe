@@ -21,6 +21,7 @@
             <img :src="imgSrc(m)" :class="imgClass(m)" />
           </div>
           <ToolBar
+            :drawBackground="true"
             :createActions="createActions"
             :value="m"
             class="toolbar"

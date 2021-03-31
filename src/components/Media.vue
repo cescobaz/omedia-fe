@@ -5,7 +5,8 @@
         class="gallery"
         :media="media"
         :createActions="createActions"
-        v-model="selected"
+        :value="selected"
+        @input="setSelected"
         @scroll-limit="loadMoreMedia"
       />
       <Editor class="editor section-border-l" :media="selected" />
@@ -17,7 +18,7 @@
 import Gallery from './Gallery.vue'
 import Editor from './Editor.vue'
 import { mapState } from 'vuex'
-import { actions } from '../store'
+import { actions, mutations } from '../store'
 
 function createActions (store) {
   const deleteAction = {
@@ -68,14 +69,14 @@ export default {
   props: {},
   data () {
     return {
-      selected: [],
       createActions: createActions(this.$store)
     }
   },
   computed: mapState({
     media: function (state) {
       return state.media[JSON.stringify(this.$route.query || {})]
-    }
+    },
+    selected: 'selectedMedia'
   }),
   mounted () {
     this.$store.dispatch(actions.LOAD_MEDIA, this.$route.query)
@@ -83,6 +84,9 @@ export default {
   methods: {
     loadMoreMedia () {
       this.$store.dispatch(actions.LOAD_MORE_MEDIA, this.$route.query)
+    },
+    setSelected (selected) {
+      this.$store.commit(mutations.SET_SELECTED_MEDIA, { media: selected })
     }
   },
   watch: {
